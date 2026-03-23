@@ -3,692 +3,257 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Mesa do Mestre — D&D 5e</title>
+<title>Mesa do Mestre — v2</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-/* ═══════════════════════════════════════════
-   MESA DO MESTRE — v1
-   Dark Grimoire · Functional · Tactical
-═══════════════════════════════════════════ */
-
 *{box-sizing:border-box;margin:0;padding:0}
-
 :root{
-  --bg:       #070508;
-  --bg2:      #0c0a10;
-  --bg3:      #121018;
-  --bg4:      #191622;
-  --bg5:      #201c2c;
-
-  --text:     #ddd4c0;
-  --text2:    #a89878;
-  --text3:    #5a5040;
-
-  --gold:     #c9a84c;
-  --gold2:    #e4c870;
-  --gold3:    #f8e0a0;
-  --gold-glow:rgba(201,168,76,.18);
-
-  --blood:    #8c1e2e;
-  --blood2:   #b83040;
-  --blood3:   #e04055;
-
-  --arc:      #4a2880;
-  --arc2:     #7848b8;
-  --arc3:     #a870e0;
-
-  --teal:     #1a5a60;
-  --teal2:    #2a9090;
-  --teal3:    #50c8c0;
-
-  --green:    #1e5a2a;
-  --green2:   #38a04a;
-  --green3:   #60d070;
-
-  --border:   rgba(201,168,76,.10);
-  --border2:  rgba(201,168,76,.25);
-  --border3:  rgba(201,168,76,.5);
-
-  --shadow:   0 4px 32px rgba(0,0,0,.8);
-  --glow:     0 0 24px rgba(201,168,76,.15);
-
-  --font-title:  'Cinzel Decorative', serif;
-  --font-head:   'Cinzel', serif;
-  --font-body:   'IM Fell English', Georgia, serif;
-  --font-mono:   'Fira Code', monospace;
-
-  --panel-l: 300px;
-  --panel-r: 280px;
-  --header-h: 54px;
+  --bg:#070508;--bg2:#0c0a10;--bg3:#121018;--bg4:#191622;--bg5:#201c2c;
+  --text:#ddd4c0;--text2:#a89878;--text3:#5a5040;
+  --gold:#c9a84c;--gold2:#e4c870;--gold3:#f8e0a0;--gold-glow:rgba(201,168,76,.18);
+  --blood:#8c1e2e;--blood2:#b83040;--blood3:#e04055;
+  --arc:#4a2880;--arc2:#7848b8;--arc3:#a870e0;
+  --teal:#1a5a60;--teal2:#2a9090;--teal3:#50c8c0;
+  --green:#1e5a2a;--green2:#38a04a;--green3:#60d070;
+  --amber:#c86820;--amber2:#e88a30;--amber3:#f8aa58;
+  --border:rgba(201,168,76,.10);--border2:rgba(201,168,76,.25);--border3:rgba(201,168,76,.5);
+  --shadow:0 4px 32px rgba(0,0,0,.8);--glow:0 0 24px rgba(201,168,76,.15);
+  --font-title:'Cinzel Decorative',serif;--font-head:'Cinzel',serif;
+  --font-body:'IM Fell English',Georgia,serif;--font-mono:'Fira Code',monospace;
+  --header-h:54px;--panel-l:300px;--panel-r:280px;
 }
-
-html,body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--font-body);
-  height:100%;
-  overflow:hidden;
-}
-
-/* Grain overlay */
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;z-index:9999;opacity:.6;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:var(--bg2)}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-::-webkit-scrollbar-thumb:hover{background:var(--gold)}
-
-/* ── SCREENS ── */
-.screen{display:none;height:100vh;overflow:hidden}
-.screen.active{display:flex;flex-direction:column}
-
-/* ══════════════════════════════
-   SCREEN: API KEY
-══════════════════════════════ */
-#screen-api{
-  align-items:center;justify-content:center;
-  background:radial-gradient(ellipse at 50% 40%, rgba(201,168,76,.04) 0%, transparent 70%), var(--bg);
-}
-
-.api-card{
-  width:480px;
-  background:var(--bg2);
-  border:1px solid var(--border2);
-  border-radius:4px;
-  padding:48px 40px 40px;
-  box-shadow:var(--shadow), var(--glow);
-  text-align:center;
-  animation:fadeUp .5s ease;
-}
-
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.api-card .sigil{
-  font-size:2.4rem;margin-bottom:8px;
-  filter:drop-shadow(0 0 12px rgba(201,168,76,.5));
-}
-
-.api-card h1{
-  font-family:var(--font-title);
-  font-size:1.3rem;color:var(--gold2);
-  letter-spacing:.08em;margin-bottom:4px;
-}
-
-.api-card .subtitle{
-  font-family:var(--font-body);
-  font-style:italic;color:var(--text2);
-  font-size:.95rem;margin-bottom:32px;
-}
-
-.api-card .divider{
-  width:60px;height:1px;
-  background:linear-gradient(to right,transparent,var(--gold),transparent);
-  margin:0 auto 32px;
-}
-
-.field-group{
-  text-align:left;margin-bottom:20px;
-}
-
-.field-group label{
-  display:block;
-  font-family:var(--font-head);
-  font-size:.7rem;letter-spacing:.12em;
-  color:var(--gold2);margin-bottom:8px;
-  text-transform:uppercase;
-}
-
-.field-group input,.field-group textarea,.field-group select{
-  width:100%;
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:3px;
-  color:var(--text);
-  font-family:var(--font-mono);
-  font-size:.82rem;
-  padding:10px 14px;
-  outline:none;
-  transition:border-color .2s, box-shadow .2s;
-}
-
-.field-group input:focus,
-.field-group textarea:focus,
-.field-group select:focus{
-  border-color:var(--border2);
-  box-shadow:0 0 0 2px var(--gold-glow);
-}
-
-.field-group input[type="password"]{
-  letter-spacing:.05em;
-}
-
-.field-group select option{
-  background:var(--bg3);
-}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font-body);height:100%;overflow:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.6}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+.screen{display:none;height:100vh;overflow:hidden}.screen.active{display:flex;flex-direction:column}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 /* ── BUTTONS ── */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  font-family:var(--font-head);
-  font-size:.75rem;letter-spacing:.12em;
-  text-transform:uppercase;
-  padding:11px 24px;
-  border:1px solid var(--border2);
-  border-radius:3px;
-  cursor:pointer;
-  transition:all .2s;
-  position:relative;overflow:hidden;
-}
-
-.btn::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(255,255,255,.04),transparent);
-  pointer-events:none;
-}
-
-.btn-primary{
-  background:linear-gradient(to bottom,rgba(201,168,76,.18),rgba(201,168,76,.06));
-  color:var(--gold2);border-color:var(--border3);
-}
-.btn-primary:hover{
-  background:linear-gradient(to bottom,rgba(201,168,76,.28),rgba(201,168,76,.12));
-  box-shadow:0 0 16px rgba(201,168,76,.2);
-  border-color:var(--gold);
-}
-
-.btn-danger{
-  background:rgba(139,30,46,.2);
-  color:var(--blood3);border-color:rgba(139,30,46,.4);
-}
-.btn-danger:hover{background:rgba(139,30,46,.35)}
-
-.btn-ghost{
-  background:transparent;
-  color:var(--text2);border-color:var(--border);
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-head);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;padding:11px 24px;border:1px solid var(--border2);border-radius:3px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.btn::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.04),transparent);pointer-events:none}
+.btn-primary{background:linear-gradient(to bottom,rgba(201,168,76,.18),rgba(201,168,76,.06));color:var(--gold2);border-color:var(--border3)}
+.btn-primary:hover{background:linear-gradient(to bottom,rgba(201,168,76,.28),rgba(201,168,76,.12));box-shadow:0 0 16px rgba(201,168,76,.2);border-color:var(--gold)}
+.btn-arc{background:rgba(74,40,128,.2);color:var(--arc3);border-color:rgba(74,40,128,.4)}
+.btn-arc:hover{background:rgba(74,40,128,.35)}
+.btn-teal{background:rgba(26,90,96,.2);color:var(--teal3);border-color:rgba(26,90,96,.4)}
+.btn-teal:hover{background:rgba(26,90,96,.35)}
+.btn-amber{background:rgba(200,104,32,.2);color:var(--amber3);border-color:rgba(200,104,32,.4)}
+.btn-amber:hover{background:rgba(200,104,32,.35)}
+.btn-ghost{background:transparent;color:var(--text2);border-color:var(--border)}
 .btn-ghost:hover{border-color:var(--border2);color:var(--text)}
-
+.btn-danger{background:rgba(139,30,46,.2);color:var(--blood3);border-color:rgba(139,30,46,.4)}
 .btn-sm{font-size:.68rem;padding:7px 14px}
 .btn-full{width:100%}
-
 .btn:disabled{opacity:.4;cursor:not-allowed}
 
-/* ══════════════════════════════
+.field-group{text-align:left;margin-bottom:16px}
+.field-group label{display:block;font-family:var(--font-head);font-size:.7rem;letter-spacing:.12em;color:var(--gold2);margin-bottom:8px;text-transform:uppercase}
+.field-group input,.field-group textarea,.field-group select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:var(--font-body);font-size:.88rem;padding:10px 14px;outline:none;transition:border-color .2s,box-shadow .2s}
+.field-group input:focus,.field-group textarea:focus,.field-group select:focus{border-color:var(--border2);box-shadow:0 0 0 2px var(--gold-glow)}
+.field-group select option{background:var(--bg3)}
+.sep{border:none;border-top:1px solid var(--border);margin:20px 0}
+
+/* ══════════════════════════
+   SCREEN: API KEY
+══════════════════════════ */
+#screen-api{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,rgba(201,168,76,.04) 0%,transparent 70%),var(--bg)}
+.api-card{width:480px;background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:48px 40px 40px;box-shadow:var(--shadow),var(--glow);text-align:center;animation:fadeUp .5s ease}
+.api-card .sigil{font-size:2.4rem;margin-bottom:8px;filter:drop-shadow(0 0 12px rgba(201,168,76,.5))}
+.api-card h1{font-family:var(--font-title);font-size:1.3rem;color:var(--gold2);letter-spacing:.08em;margin-bottom:4px}
+.api-card .subtitle{font-family:var(--font-body);font-style:italic;color:var(--text2);font-size:.95rem;margin-bottom:32px}
+.api-card .divider{width:60px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:0 auto 32px}
+
+/* ══════════════════════════
+   SCREEN: MAIN HUB
+══════════════════════════ */
+#screen-hub{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,.03) 0%,transparent 60%),var(--bg)}
+.hub-card{width:700px;text-align:center;animation:fadeUp .5s ease}
+.hub-title{font-family:var(--font-title);font-size:1.5rem;color:var(--gold2);letter-spacing:.1em;margin-bottom:6px}
+.hub-sub{font-style:italic;color:var(--text2);font-size:.95rem;margin-bottom:40px}
+.hub-divider{width:80px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:0 auto 40px}
+.hub-modules{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:32px}
+.hub-module{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:28px 20px 24px;cursor:pointer;transition:all .25s;text-align:center}
+.hub-module:hover{border-color:var(--border2);box-shadow:var(--glow);transform:translateY(-2px)}
+.hub-module .mod-icon{font-size:2rem;margin-bottom:12px;display:block}
+.hub-module .mod-name{font-family:var(--font-head);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.hub-module .mod-desc{font-size:.78rem;color:var(--text2);font-style:italic;line-height:1.55}
+.hub-module.gold .mod-name{color:var(--gold2)}
+.hub-module.gold:hover{border-color:var(--gold);box-shadow:0 0 20px var(--gold-glow)}
+.hub-module.arc .mod-name{color:var(--arc3)}
+.hub-module.arc:hover{border-color:rgba(120,72,184,.5);box-shadow:0 0 20px rgba(74,40,128,.2)}
+.hub-module.teal .mod-name{color:var(--teal3)}
+.hub-module.teal:hover{border-color:rgba(42,144,144,.5);box-shadow:0 0 20px rgba(26,90,96,.2)}
+.hub-bottom{display:flex;align-items:center;justify-content:center;gap:12px}
+
+/* ══════════════════════════
    SCREEN: SETUP
-══════════════════════════════ */
-#screen-setup{
-  background:var(--bg);
-}
-
-.setup-header{
-  height:var(--header-h);
-  background:var(--bg2);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 28px;
-  flex-shrink:0;
-}
-
-.setup-header .logo{
-  font-family:var(--font-title);
-  font-size:.95rem;color:var(--gold2);
-  letter-spacing:.08em;display:flex;align-items:center;gap:10px;
-}
-
-.setup-body{
-  flex:1;overflow-y:auto;
-  padding:32px 40px 40px;
-  max-width:900px;width:100%;margin:0 auto;
-}
-
-.section-title{
-  font-family:var(--font-head);
-  font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:20px;
-  display:flex;align-items:center;gap:12px;
-}
-.section-title::after{
-  content:'';flex:1;height:1px;
-  background:linear-gradient(to right,var(--border2),transparent);
-}
-
-.setup-grid-2{
-  display:grid;grid-template-columns:1fr 1fr;gap:16px;
-  margin-bottom:16px;
-}
-
-.setup-grid-3{
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;
-  margin-bottom:16px;
-}
-
-/* Character cards */
-.chars-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(380px,1fr));
-  gap:16px;
-  margin-bottom:20px;
-}
-
-.char-card{
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:4px;
-  padding:20px;
-  position:relative;
-  transition:border-color .2s;
-}
+══════════════════════════ */
+#screen-setup{background:var(--bg)}
+.setup-header{height:var(--header-h);background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;flex-shrink:0}
+.setup-header .logo{font-family:var(--font-title);font-size:.95rem;color:var(--gold2);letter-spacing:.08em;display:flex;align-items:center;gap:10px}
+.setup-body{flex:1;overflow-y:auto;padding:32px 40px 40px;max-width:900px;width:100%;margin:0 auto}
+.section-title{font-family:var(--font-head);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border2),transparent)}
+.setup-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.chars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:16px;margin-bottom:20px}
+.char-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:20px;position:relative;transition:border-color .2s}
 .char-card:hover{border-color:var(--border2)}
-
-.char-card-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:16px;
-}
-
-.char-number{
-  font-family:var(--font-head);
-  font-size:.65rem;letter-spacing:.15em;
-  color:var(--gold2);text-transform:uppercase;
-  background:rgba(201,168,76,.08);
-  border:1px solid var(--border);
-  padding:3px 10px;border-radius:2px;
-}
-
-.remove-char{
-  background:none;border:none;cursor:pointer;
-  color:var(--text3);font-size:1rem;
-  transition:color .2s;padding:2px 6px;
-}
+.char-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.char-number{font-family:var(--font-head);font-size:.65rem;letter-spacing:.15em;color:var(--gold2);text-transform:uppercase;background:rgba(201,168,76,.08);border:1px solid var(--border);padding:3px 10px;border-radius:2px}
+.remove-char{background:none;border:none;cursor:pointer;color:var(--text3);font-size:1rem;transition:color .2s;padding:2px 6px}
 .remove-char:hover{color:var(--blood3)}
+.add-char-btn{width:100%;padding:16px;background:transparent;border:1px dashed var(--border);border-radius:4px;color:var(--text3);font-family:var(--font-head);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.add-char-btn:hover{border-color:var(--border2);color:var(--gold2);background:rgba(201,168,76,.03)}
+.setup-actions{display:flex;gap:12px;justify-content:flex-end;padding-top:24px;margin-top:8px;border-top:1px solid var(--border)}
 
-.char-card textarea{
-  font-size:.82rem;
-  resize:vertical;
-  min-height:60px;
-}
-
-.add-char-btn{
-  width:100%;padding:16px;
-  background:transparent;
-  border:1px dashed var(--border);
-  border-radius:4px;
-  color:var(--text3);
-  font-family:var(--font-head);
-  font-size:.7rem;letter-spacing:.12em;
-  text-transform:uppercase;
-  cursor:pointer;
-  transition:all .2s;
-}
-.add-char-btn:hover{
-  border-color:var(--border2);
-  color:var(--gold2);
-  background:rgba(201,168,76,.03);
-}
-
-.setup-actions{
-  display:flex;gap:12px;justify-content:flex-end;
-  padding-top:24px;margin-top:8px;
-  border-top:1px solid var(--border);
-}
-
-/* ══════════════════════════════
-   SCREEN: SESSION
-══════════════════════════════ */
-#screen-session{
-  flex-direction:row;
-  background:var(--bg);
-}
+/* ══════════════════════════
+   SCREEN: SESSÃO AO VIVO
+══════════════════════════ */
+#screen-session{flex-direction:row;background:var(--bg)}
 
 /* Left panel — Players */
-.panel-left{
-  width:var(--panel-l);
-  flex-shrink:0;
-  display:flex;flex-direction:column;
-  border-right:1px solid var(--border);
-  background:var(--bg2);
-}
+.panel-left{width:var(--panel-l);flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--bg2)}
+.panel-header{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border);flex-shrink:0}
+.panel-title{font-family:var(--font-head);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold2);display:flex;align-items:center;gap:8px}
+.panel-badge{font-size:.6rem;padding:2px 8px;background:rgba(201,168,76,.1);border:1px solid var(--border);border-radius:12px;color:var(--text2)}
+.panel-body{flex:1;overflow-y:auto;padding:14px}
 
-.panel-header{
-  height:var(--header-h);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 18px;
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;
-}
-
-.panel-title{
-  font-family:var(--font-head);
-  font-size:.7rem;letter-spacing:.15em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  display:flex;align-items:center;gap:8px;
-}
-
-.panel-badge{
-  font-size:.6rem;padding:2px 8px;
-  background:rgba(201,168,76,.1);
-  border:1px solid var(--border);
-  border-radius:12px;color:var(--text2);
-}
-
-.panel-body{
-  flex:1;overflow-y:auto;padding:14px;
-}
-
-/* Player response blocks */
-.player-block{
-  margin-bottom:12px;
-  border:1px solid var(--border);
-  border-radius:4px;
-  overflow:hidden;
-  background:var(--bg3);
-  transition:border-color .2s;
-}
+.player-block{margin-bottom:10px;border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--bg3);transition:border-color .2s}
 .player-block:hover{border-color:var(--border2)}
-
-.player-block-head{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 14px;
-  background:var(--bg4);
-  border-bottom:1px solid var(--border);
-}
-
-.player-avatar{
-  width:32px;height:32px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1rem;flex-shrink:0;
-  border:1px solid var(--border);
-}
-
+.player-block-head{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg4);border-bottom:1px solid var(--border)}
+.player-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;border:1px solid var(--border)}
 .player-block-meta{flex:1;min-width:0}
-.player-name{
-  font-family:var(--font-head);
-  font-size:.72rem;color:var(--gold2);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.player-class{
-  font-size:.65rem;color:var(--text3);
-  font-style:italic;
-}
-
-.player-block-body{
-  padding:12px 14px;
-  font-size:.82rem;line-height:1.65;
-  color:var(--text);min-height:40px;
-}
-
-.player-block-body.loading{
-  color:var(--text3);font-style:italic;
-}
+.player-name{font-family:var(--font-head);font-size:.7rem;color:var(--gold2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-class{font-size:.62rem;color:var(--text3);font-style:italic}
+.player-block-body{padding:10px 12px;font-size:.8rem;line-height:1.65;color:var(--text);min-height:36px}
+.player-block-body.loading{color:var(--text3);font-style:italic}
 
 /* Right panel — Orientador */
-.panel-right{
-  width:var(--panel-r);
-  flex-shrink:0;
-  display:flex;flex-direction:column;
-  border-left:1px solid var(--border);
-  background:var(--bg2);
-}
-
-.panel-right .panel-body{padding:14px}
-
-/* Feedback blocks */
-.feedback-section{
-  margin-bottom:10px;
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:4px;
-  overflow:hidden;
-}
-
-.feedback-section summary{
-  padding:9px 14px;
-  font-family:var(--font-head);
-  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--text2);
-  cursor:pointer;
-  list-style:none;
-  display:flex;align-items:center;justify-content:space-between;
-  user-select:none;
-  background:var(--bg4);
-}
+.panel-right{width:var(--panel-r);flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid var(--border);background:var(--bg2)}
+.feedback-section{margin-bottom:8px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.feedback-section summary{padding:8px 12px;font-family:var(--font-head);font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;user-select:none;background:var(--bg4)}
 .feedback-section summary:hover{color:var(--text)}
-.feedback-section summary::after{
-  content:'▾';font-size:.7rem;color:var(--text3);
-  transition:transform .2s;
-}
+.feedback-section summary::after{content:'▾';font-size:.7rem;color:var(--text3);transition:transform .2s}
 .feedback-section[open] summary::after{transform:rotate(180deg)}
+.feedback-body{padding:10px 12px;font-size:.79rem;line-height:1.65;color:var(--text2);min-height:28px}
 
-.feedback-body{
-  padding:12px 14px;
-  font-size:.8rem;line-height:1.65;
-  color:var(--text2);min-height:30px;
-}
+.arbitro-section{flex-shrink:0;border-top:1px solid var(--border);padding:12px;background:var(--bg2)}
+.arbitro-title{font-family:var(--font-head);font-size:.67rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal2);margin-bottom:8px;display:flex;justify-content:space-between}
+.arbitro-body{font-family:var(--font-mono);font-size:.72rem;line-height:1.7;color:var(--teal3);background:rgba(26,90,96,.08);border:1px solid rgba(42,144,144,.15);border-radius:3px;padding:9px 11px;min-height:44px;max-height:160px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
 
-/* Árbitro section */
-.arbitro-section{
-  flex-shrink:0;
-  border-top:1px solid var(--border);
-  padding:14px;
-  background:var(--bg2);
-}
-
-.arbitro-title{
-  font-family:var(--font-head);
-  font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--teal2);margin-bottom:10px;
-  display:flex;align-items:center;gap:6px;
-}
-
-.arbitro-body{
-  font-family:var(--font-mono);
-  font-size:.74rem;line-height:1.7;
-  color:var(--teal3);
-  background:rgba(26,90,96,.08);
-  border:1px solid rgba(42,144,144,.15);
-  border-radius:3px;
-  padding:10px 12px;
-  min-height:50px;
-  max-height:180px;
-  overflow-y:auto;
-  white-space:pre-wrap;
-  word-break:break-word;
-}
-
-/* Center — main session area */
-.panel-center{
-  flex:1;
-  display:flex;flex-direction:column;
-  min-width:0;
-  overflow:hidden;
-}
-
-/* Session topbar */
-.session-topbar{
-  height:var(--header-h);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;
-  border-bottom:1px solid var(--border);
-  background:var(--bg2);
-  flex-shrink:0;gap:12px;
-}
-
-.session-adventure{
-  flex:1;min-width:0;
-}
-.session-adventure-title{
-  font-family:var(--font-head);
-  font-size:.8rem;color:var(--gold2);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.session-adventure-meta{
-  font-size:.68rem;color:var(--text3);
-  font-style:italic;
-}
-
+/* Center — session */
+.panel-center{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.session-topbar{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:12px}
+.session-adventure-title{font-family:var(--font-head);font-size:.8rem;color:var(--gold2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.session-adventure-meta{font-size:.67rem;color:var(--text3);font-style:italic}
 .topbar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
-
-/* Indicator dot */
-.status-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--text3);
-  flex-shrink:0;transition:background .3s;
-}
-.status-dot.loading{
-  background:var(--gold);
-  animation:pulse 1s ease-in-out infinite;
-}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:background .3s}
+.status-dot.loading{background:var(--gold);animation:pulse 1s ease-in-out infinite}
 .status-dot.done{background:var(--green3)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-/* History */
-.history-scroll{
-  flex:1;overflow-y:auto;
-  padding:20px;
-  display:flex;flex-direction:column;gap:16px;
-}
-
-.history-entry{
-  animation:fadeUp .3s ease;
-}
-
-.history-entry-header{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:8px;
-}
-
-.history-tag{
-  font-family:var(--font-head);
-  font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
-  padding:2px 10px;border-radius:2px;
-  flex-shrink:0;
-}
-.tag-mestre{
-  background:rgba(201,168,76,.1);
-  color:var(--gold2);border:1px solid var(--border);
-}
-.tag-round{
-  background:rgba(74,40,128,.12);
-  color:var(--arc3);border:1px solid rgba(74,40,128,.3);
-}
-
-.history-timestamp{
-  font-size:.62rem;color:var(--text3);margin-left:auto;
-  font-family:var(--font-mono);
-}
-
-.history-narration{
-  font-size:.9rem;line-height:1.75;
-  color:var(--text);
-  font-style:italic;
-  border-left:2px solid var(--border2);
-  padding-left:14px;
-}
-
-.history-round-summary{
-  font-size:.78rem;color:var(--text2);
-  border-left:2px solid rgba(74,40,128,.4);
-  padding-left:14px;
-  line-height:1.6;
-}
-
-/* Narration input area */
-.narration-area{
-  border-top:1px solid var(--border);
-  padding:16px 20px;
-  background:var(--bg2);
-  flex-shrink:0;
-}
-
-.narration-label{
-  font-family:var(--font-head);
-  font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--text3);margin-bottom:8px;
-  display:flex;align-items:center;gap:8px;
-}
-
-.narration-input{
-  width:100%;
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:3px;
-  color:var(--text);
-  font-family:var(--font-body);
-  font-size:.9rem;
-  line-height:1.7;
-  padding:14px 16px;
-  resize:none;
-  min-height:100px;
-  max-height:200px;
-  outline:none;
-  transition:border-color .2s, box-shadow .2s;
-}
-.narration-input:focus{
-  border-color:var(--border2);
-  box-shadow:0 0 0 2px var(--gold-glow);
-}
+.history-scroll{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+.history-entry{animation:fadeUp .3s ease}
+.history-entry-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.history-tag{font-family:var(--font-head);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:2px 10px;border-radius:2px;flex-shrink:0}
+.tag-mestre{background:rgba(201,168,76,.1);color:var(--gold2);border:1px solid var(--border)}
+.tag-round{background:rgba(74,40,128,.12);color:var(--arc3);border:1px solid rgba(74,40,128,.3)}
+.history-timestamp{font-size:.62rem;color:var(--text3);margin-left:auto;font-family:var(--font-mono)}
+.history-narration{font-size:.88rem;line-height:1.75;color:var(--text);font-style:italic;border-left:2px solid var(--border2);padding-left:14px}
+.history-round-summary{font-size:.77rem;color:var(--text2);border-left:2px solid rgba(74,40,128,.4);padding-left:14px;line-height:1.6;margin-top:6px}
+.narration-area{border-top:1px solid var(--border);padding:14px 20px;background:var(--bg2);flex-shrink:0}
+.narration-label{font-family:var(--font-head);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.narration-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:var(--font-body);font-size:.9rem;line-height:1.7;padding:12px 16px;resize:none;min-height:90px;max-height:180px;outline:none;transition:border-color .2s,box-shadow .2s}
+.narration-input:focus{border-color:var(--border2);box-shadow:0 0 0 2px var(--gold-glow)}
 .narration-input::placeholder{color:var(--text3)}
+.narration-actions{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:10px}
+.narration-hint{font-size:.7rem;color:var(--text3);font-style:italic;flex:1}
 
-.narration-actions{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-top:10px;gap:10px;
-}
+/* ══════════════════════════
+   SCREEN: TREINAMENTO
+══════════════════════════ */
+#screen-training{background:var(--bg);flex-direction:row}
+.training-sidebar{width:260px;flex-shrink:0;border-right:1px solid var(--border);background:var(--bg2);display:flex;flex-direction:column}
+.training-sidebar-header{height:var(--header-h);display:flex;align-items:center;padding:0 18px;border-bottom:1px solid var(--border);flex-shrink:0}
+.training-sidebar-title{font-family:var(--font-title);font-size:.82rem;color:var(--arc3);letter-spacing:.06em}
+.training-nav{flex:1;overflow-y:auto;padding:12px 0}
+.training-nav-section{padding:8px 18px 4px;font-family:var(--font-head);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3)}
+.training-nav-item{display:flex;align-items:center;gap:10px;padding:8px 18px;cursor:pointer;font-size:.8rem;color:var(--text2);border-left:2px solid transparent;transition:all .2s;font-family:var(--font-body)}
+.training-nav-item:hover{color:var(--text);background:rgba(255,255,255,.02)}
+.training-nav-item.active{color:var(--arc3);border-left-color:var(--arc2);background:rgba(74,40,128,.08)}
+.training-nav-item .nav-icon{font-size:1rem;flex-shrink:0;width:20px;text-align:center}
+.training-nav-item .nav-badge{margin-left:auto;font-family:var(--font-mono);font-size:.6rem;color:var(--text3);background:var(--bg4);padding:1px 6px;border-radius:10px}
+.training-nav-item.done .nav-badge{color:var(--green3);background:rgba(56,160,74,.12)}
+.training-main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.training-topbar{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0}
+.training-topbar-title{font-family:var(--font-head);font-size:.85rem;color:var(--arc3);letter-spacing:.08em}
+.training-body{flex:1;overflow-y:auto;padding:28px 36px 40px}
 
-.narration-hint{
-  font-size:.72rem;color:var(--text3);font-style:italic;
-  flex:1;
-}
+/* Exercise cards */
+.exercise-intro{background:var(--bg2);border:1px solid rgba(74,40,128,.25);border-radius:4px;padding:20px 24px;margin-bottom:24px;font-size:.88rem;line-height:1.75;color:var(--text)}
+.exercise-intro strong{color:var(--arc3);font-style:normal}
+.ex-before-after{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.ex-box{border-radius:4px;padding:16px;font-size:.82rem;line-height:1.7}
+.ex-box.bad{background:rgba(139,30,46,.08);border:1px solid rgba(139,30,46,.25)}
+.ex-box.good{background:rgba(56,160,74,.06);border:1px solid rgba(56,160,74,.2)}
+.ex-box-label{font-family:var(--font-head);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.ex-box.bad .ex-box-label{color:var(--blood3)}
+.ex-box.good .ex-box-label{color:var(--green3)}
+.ex-note{font-size:.78rem;color:var(--text2);font-style:italic;border-left:2px solid var(--border2);padding:8px 14px;margin-bottom:20px;line-height:1.65}
 
-/* ── TOAST / NOTIFICATION ── */
-#toast{
-  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
-  background:var(--bg3);
-  border:1px solid var(--border2);
-  border-radius:4px;
-  padding:10px 20px;
-  font-family:var(--font-head);
-  font-size:.75rem;letter-spacing:.08em;
-  color:var(--text);
-  box-shadow:var(--shadow);
-  z-index:9998;
-  opacity:0;transition:opacity .25s;
-  pointer-events:none;
-}
+.exercise-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;margin-bottom:18px;overflow:hidden}
+.exercise-card-head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.exercise-card-number{font-family:var(--font-mono);font-size:.68rem;color:var(--arc3);background:rgba(74,40,128,.15);border:1px solid rgba(74,40,128,.3);padding:2px 8px;border-radius:2px;flex-shrink:0}
+.exercise-card-title{font-family:var(--font-head);font-size:.75rem;letter-spacing:.08em;color:var(--text);flex:1}
+.exercise-card-status{font-size:.65rem;font-family:var(--font-mono);color:var(--text3)}
+.exercise-card-status.done-status{color:var(--green3)}
+.exercise-card-body{padding:18px}
+.exercise-prompt{font-size:.84rem;line-height:1.7;color:var(--text2);margin-bottom:14px}
+.exercise-prompt ul{margin-left:20px;margin-top:8px}
+.exercise-prompt li{margin-bottom:4px;font-size:.82rem}
+
+/* AI feedback panel */
+.ai-feedback{background:var(--bg3);border:1px solid rgba(74,40,128,.2);border-radius:4px;padding:16px;margin-top:12px;display:none}
+.ai-feedback.visible{display:block;animation:fadeUp .3s ease}
+.ai-feedback-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ai-feedback-badge{font-family:var(--font-head);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 10px;background:rgba(74,40,128,.15);border:1px solid rgba(74,40,128,.3);border-radius:2px;color:var(--arc3)}
+.ai-feedback-score{margin-left:auto;font-family:var(--font-mono);font-size:.75rem;color:var(--gold2)}
+.ai-feedback-body{font-size:.82rem;line-height:1.72;color:var(--text)}
+.ai-feedback-body strong{color:var(--arc3)}
+.score-bar{height:4px;background:var(--bg4);border-radius:2px;margin:10px 0 4px;overflow:hidden}
+.score-fill{height:100%;border-radius:2px;background:linear-gradient(to right,var(--arc2),var(--arc3));transition:width .6s ease}
+.score-labels{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:.6rem;color:var(--text3)}
+
+/* Criatividade challenge */
+.challenge-box{background:rgba(200,104,32,.06);border:1px solid rgba(200,104,32,.25);border-radius:4px;padding:16px 18px;margin-bottom:18px}
+.challenge-box-title{font-family:var(--font-head);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber3);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.challenge-box-body{font-size:.82rem;line-height:1.68;color:var(--text2)}
+
+/* Writing area */
+.write-area{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:var(--font-body);font-size:.88rem;line-height:1.75;padding:14px 16px;resize:vertical;min-height:110px;outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:12px}
+.write-area:focus{border-color:rgba(74,40,128,.4);box-shadow:0 0 0 2px rgba(74,40,128,.1)}
+.write-area::placeholder{color:var(--text3);font-style:italic}
+.write-actions{display:flex;gap:10px;align-items:center;margin-bottom:20px}
+.write-hint{font-size:.72rem;color:var(--text3);font-style:italic;flex:1}
+
+/* Progress tracker */
+.progress-bar-outer{height:3px;background:var(--bg4);border-radius:2px;margin-top:10px;overflow:hidden}
+.progress-bar-inner{height:100%;background:linear-gradient(to right,var(--arc2),var(--arc3));border-radius:2px;transition:width .4s ease}
+
+/* Loading spinner */
+.loading-spinner{width:16px;height:16px;border:2px solid rgba(168,120,168,.2);border-top-color:var(--arc3);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+
+/* Module title pages */
+.module-hero{text-align:center;padding:32px 0 28px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.module-hero-icon{font-size:2.5rem;margin-bottom:12px;display:block}
+.module-hero-title{font-family:var(--font-title);font-size:1.2rem;color:var(--arc3);letter-spacing:.08em;margin-bottom:6px}
+.module-hero-sub{font-style:italic;color:var(--text2);font-size:.88rem;line-height:1.6;max-width:480px;margin:0 auto}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:10px 20px;font-family:var(--font-head);font-size:.75rem;letter-spacing:.08em;color:var(--text);box-shadow:var(--shadow);z-index:9998;opacity:0;transition:opacity .25s;pointer-events:none}
 #toast.show{opacity:1}
 
-/* ── MISC ── */
-.sep{
-  border:none;border-top:1px solid var(--border);
-  margin:24px 0;
-}
-
-.empty-state{
-  text-align:center;padding:32px;
-  color:var(--text3);font-style:italic;font-size:.85rem;
-}
-
-/* ── Responsive fix for small screens ── */
-@media(max-width:1100px){
-  :root{--panel-l:260px;--panel-r:240px}
-}
-@media(max-width:860px){
-  #screen-session{flex-direction:column}
-  .panel-left,.panel-right{width:100%;flex-shrink:0}
-  .panel-left{height:220px}
-  .panel-right{height:200px}
-  .panel-center{flex:1}
-}
-
-/* Classes de cor por classe D&D */
+.empty-state{text-align:center;padding:32px;color:var(--text3);font-style:italic;font-size:.85rem}
 .class-fighter{background:rgba(184,48,64,.15);border-color:rgba(184,48,64,.3)}
 .class-wizard{background:rgba(120,72,184,.15);border-color:rgba(120,72,184,.3)}
 .class-rogue{background:rgba(26,90,96,.15);border-color:rgba(42,144,144,.3)}
@@ -705,62 +270,86 @@ body::before{
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     SCREEN 1: API KEY
-══════════════════════════════════════ -->
+<!-- ══════════════════════════════
+     SCREEN: API KEY
+══════════════════════════════ -->
 <div id="screen-api" class="screen active">
   <div class="api-card">
     <div class="sigil">⚔️</div>
     <h1>Mesa do Mestre</h1>
-    <div class="subtitle">Ferramenta de teste de aventuras D&D 5e</div>
+    <div class="subtitle">Ferramenta completa para mestres D&D 5e</div>
     <div class="divider"></div>
-
     <div class="field-group">
       <label>Chave de API — Google Gemini</label>
       <input type="password" id="api-key-input" placeholder="AIza..." autocomplete="off"/>
     </div>
-    <button class="btn btn-primary btn-full" onclick="handleApiKey()">
-      <span>⚔</span> Entrar na Mesa
-    </button>
+    <button class="btn btn-primary btn-full" onclick="handleApiKey()">⚔ Entrar na Mesa</button>
     <p style="margin-top:16px;font-size:.72rem;color:var(--text3);font-style:italic;line-height:1.6">
-      A chave é salva localmente no navegador e usada apenas para chamar a API Gemini.<br>
-      Obtenha sua chave em <span style="color:var(--gold2)">aistudio.google.com</span>.
+      Chave salva localmente · Usada apenas para chamar a API Gemini<br>
+      Obtenha em <span style="color:var(--gold2)">aistudio.google.com</span>
     </p>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     SCREEN 2: SETUP
-══════════════════════════════════════ -->
-<div id="screen-setup" class="screen">
-  <div class="setup-header">
-    <div class="logo">⚔️ <span>Mesa do Mestre</span></div>
-    <div style="display:flex;gap:10px;align-items:center">
-      <button class="btn btn-ghost btn-sm" onclick="loadSetup()">📂 Carregar</button>
-      <button class="btn btn-ghost btn-sm" onclick="saveSetup()">💾 Salvar</button>
-      <input type="file" id="load-file-input" accept=".json" style="display:none" onchange="handleFileLoad(event)"/>
-      <button class="btn btn-ghost btn-sm" onclick="goToApiScreen()">🔑 Chave API</button>
+<!-- ══════════════════════════════
+     SCREEN: HUB
+══════════════════════════════ -->
+<div id="screen-hub" class="screen">
+  <div class="hub-card">
+    <div style="font-size:2rem;margin-bottom:10px">⚔️</div>
+    <div class="hub-title">Mesa do Mestre</div>
+    <div class="hub-sub">Escolha um módulo para começar</div>
+    <div class="hub-divider"></div>
+    <div class="hub-modules">
+      <div class="hub-module gold" onclick="goToSetup()">
+        <span class="mod-icon">📜</span>
+        <div class="mod-name">Configurar Aventura</div>
+        <div class="mod-desc">Cadastre sua aventura e personagens do grupo para começar uma sessão</div>
+      </div>
+      <div class="hub-module arc" onclick="goToSession()">
+        <span class="mod-icon">🎭</span>
+        <div class="mod-name">Sessão ao Vivo</div>
+        <div class="mod-desc">Narre em tempo real com feedback do orientador e jogadores IA paralelos</div>
+      </div>
+      <div class="hub-module teal" onclick="goToTraining()">
+        <span class="mod-icon">📚</span>
+        <div class="mod-name">Treino de Narração</div>
+        <div class="mod-desc">Exercícios práticos baseados no guia A Arte de Narrar para evoluir suas habilidades</div>
+      </div>
+    </div>
+    <div class="hub-bottom">
+      <button class="btn btn-ghost btn-sm" onclick="goToApiScreen()">🔑 Trocar Chave API</button>
+      <button class="btn btn-ghost btn-sm" id="hub-load-btn" onclick="document.getElementById('hub-file-input').click()">📂 Carregar Sessão</button>
+      <input type="file" id="hub-file-input" accept=".json" style="display:none" onchange="handleFileLoad(event)"/>
     </div>
   </div>
+</div>
 
-  <div class="setup-body" id="setup-body">
-
-    <!-- AVENTURA -->
+<!-- ══════════════════════════════
+     SCREEN: SETUP
+══════════════════════════════ -->
+<div id="screen-setup" class="screen">
+  <div class="setup-header">
+    <div class="logo">⚔️ <span>Configurar Aventura</span></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button class="btn btn-ghost btn-sm" onclick="saveSetup()">💾 Salvar</button>
+      <button class="btn btn-ghost btn-sm" onclick="fillExample()">✨ Exemplo</button>
+      <button class="btn btn-ghost btn-sm" onclick="showScreen('hub')">← Hub</button>
+    </div>
+  </div>
+  <div class="setup-body">
     <div class="section-title">📜 Aventura</div>
-
     <div class="field-group">
-      <label>Título da Aventura</label>
+      <label>Título</label>
       <input type="text" id="adv-title" placeholder="A Cripta dos Reis Perdidos"/>
     </div>
-
     <div class="field-group">
-      <label>Premissa / Contexto Geral</label>
-      <textarea id="adv-premise" rows="3" style="resize:vertical" placeholder="O grupo foi contratado para investigar desaparecimentos na cidade de Thornwall. Rumores falam de uma cripta esquecida sob a cidade velha..."></textarea>
+      <label>Premissa / Contexto</label>
+      <textarea id="adv-premise" rows="3" style="resize:vertical" placeholder="O grupo foi contratado para investigar desaparecimentos na cidade de Thornwall..."></textarea>
     </div>
-
     <div class="setup-grid-2">
       <div class="field-group" style="margin-bottom:0">
-        <label>Tom da Aventura</label>
+        <label>Tom</label>
         <select id="adv-tone">
           <option value="épico heroico">Épico heroico</option>
           <option value="sombrio e tenso">Sombrio e tenso</option>
@@ -772,56 +361,38 @@ body::before{
         </select>
       </div>
       <div class="field-group" style="margin-bottom:0">
-        <label>Ganchos / Motivações do Grupo</label>
-        <input type="text" id="adv-hooks" placeholder="Dívida com a guilda, vingança, busca por relíquia..."/>
+        <label>Ganchos do Grupo</label>
+        <input type="text" id="adv-hooks" placeholder="Dívida com a guilda, vingança..."/>
       </div>
     </div>
-
     <div class="sep"></div>
-
-    <!-- PERSONAGENS -->
-    <div class="section-title">🧙 Personagens do Grupo</div>
-
-    <div class="chars-grid" id="chars-grid">
-      <!-- Preenchido via JS -->
-    </div>
-
-    <button class="add-char-btn" onclick="addCharacter()" id="add-char-btn">
-      + Adicionar Personagem (máx. 4)
-    </button>
-
+    <div class="section-title">🧙 Personagens</div>
+    <div class="chars-grid" id="chars-grid"></div>
+    <button class="add-char-btn" onclick="addCharacter()" id="add-char-btn">+ Adicionar Personagem (máx. 4)</button>
     <div class="sep"></div>
-
     <div class="setup-actions">
-      <button class="btn btn-ghost" onclick="fillExample()">✨ Exemplo Rápido</button>
-      <button class="btn btn-primary" onclick="startSession()">
-        <span>⚔</span> Iniciar Sessão
-      </button>
+      <button class="btn btn-ghost" onclick="showScreen('hub')">← Voltar</button>
+      <button class="btn btn-primary" onclick="startSession()">⚔ Iniciar Sessão →</button>
     </div>
-
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     SCREEN 3: SESSION
-══════════════════════════════════════ -->
+<!-- ══════════════════════════════
+     SCREEN: SESSÃO AO VIVO
+══════════════════════════════ -->
 <div id="screen-session" class="screen">
-
   <!-- LEFT: Players -->
   <div class="panel-left">
     <div class="panel-header">
-      <div class="panel-title">
-        <span>🧙</span> Jogadores
-        <span class="panel-badge" id="players-count">0</span>
-      </div>
-      <div class="status-dot" id="dot-players" title="Status do agente Players"></div>
+      <div class="panel-title">🧙 Jogadores <span class="panel-badge" id="players-count">0</span></div>
+      <div class="status-dot" id="dot-players"></div>
     </div>
     <div class="panel-body" id="players-panel">
-      <div class="empty-state">Aguardando narração do mestre…</div>
+      <div class="empty-state">Aguardando narração…</div>
     </div>
   </div>
 
-  <!-- CENTER: History + Input -->
+  <!-- CENTER -->
   <div class="panel-center">
     <div class="session-topbar">
       <div class="session-adventure">
@@ -831,31 +402,25 @@ body::before{
       <div class="topbar-actions">
         <span id="round-counter" style="font-family:var(--font-mono);font-size:.7rem;color:var(--text3)">Rodada 0</span>
         <button class="btn btn-ghost btn-sm" onclick="exportSession()">💾 Exportar</button>
-        <button class="btn btn-ghost btn-sm" onclick="goToSetup()">⚙ Setup</button>
+        <button class="btn btn-ghost btn-sm" onclick="showScreen('hub')">← Hub</button>
       </div>
     </div>
-
     <div class="history-scroll" id="history-scroll">
-      <div class="empty-state" style="margin:auto">
-        ✦ &nbsp;Escreva a primeira narração e clique em Jogar para começar a sessão.
-      </div>
+      <div class="empty-state" style="margin:auto">✦ &nbsp;Escreva a primeira narração e clique em Jogar.</div>
     </div>
-
     <div class="narration-area">
       <div class="narration-label">
         ⚔ Narração do Mestre
         <span id="narration-status" style="font-style:italic;font-weight:400;font-size:.62rem;color:var(--text3)"></span>
       </div>
       <textarea class="narration-input" id="narration-input"
-        placeholder="Descreva a cena, o ambiente, NPCs, desafios… O grupo está diante do portão da Cripta. Uma névoa densa rasteja pelo chão encharcado. Tochas apagadas em suportes enferrujados ladeiam a entrada entalhada em pedra negra. Vocês ouvem um choro abafado vindo de dentro."
+        placeholder="Descreva a cena com detalhes sensoriais. Use os cinco sentidos, mostre sem contar, crie tensão através do ambiente..."
         onkeydown="handleNarrationKey(event)"></textarea>
       <div class="narration-actions">
-        <span class="narration-hint">Shift+Enter para nova linha • Enter para jogar</span>
+        <span class="narration-hint">Shift+Enter = nova linha · Enter = Jogar</span>
         <div style="display:flex;gap:8px">
           <button class="btn btn-ghost btn-sm" onclick="clearNarration()">Limpar</button>
-          <button class="btn btn-primary" id="play-btn" onclick="playRound()">
-            ⚔ Jogar
-          </button>
+          <button class="btn btn-primary" id="play-btn" onclick="playRound()">⚔ Jogar</button>
         </div>
       </div>
     </div>
@@ -864,60 +429,198 @@ body::before{
   <!-- RIGHT: Orientador + Árbitro -->
   <div class="panel-right">
     <div class="panel-header">
-      <div class="panel-title">
-        <span>🔮</span> Orientador
-      </div>
-      <div class="status-dot" id="dot-orientador" title="Status do agente Orientador"></div>
+      <div class="panel-title">🔮 Orientador</div>
+      <div class="status-dot" id="dot-orientador"></div>
     </div>
-
     <div class="panel-body" id="orientador-panel" style="display:flex;flex-direction:column;gap:4px">
-      <div class="empty-state">Aguardando narração do mestre…</div>
+      <div class="empty-state">Aguardando narração…</div>
     </div>
-
     <div class="arbitro-section">
-      <div class="arbitro-title" style="display:flex;justify-content:space-between">
-        <span>⚖ Árbitro de Regras</span>
+      <div class="arbitro-title">
+        <span>⚖ Árbitro</span>
         <div class="status-dot" id="dot-arbitro"></div>
       </div>
-      <div class="arbitro-body" id="arbitro-panel">Aguardando ações dos jogadores…</div>
+      <div class="arbitro-body" id="arbitro-panel">Aguardando ações…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: TREINAMENTO
+══════════════════════════════ -->
+<div id="screen-training" class="screen">
+  <!-- Sidebar navigation -->
+  <div class="training-sidebar">
+    <div class="training-sidebar-header">
+      <div class="training-sidebar-title">📚 Treino de Narração</div>
+    </div>
+    <div class="training-nav" id="training-nav">
+      <!-- Preenchido via JS -->
     </div>
   </div>
 
+  <!-- Main area -->
+  <div class="training-main">
+    <div class="training-topbar">
+      <div class="training-topbar-title" id="training-topbar-title">Selecione um módulo</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div style="font-family:var(--font-mono);font-size:.7rem;color:var(--text3)" id="training-progress-label">0/0 exercícios</div>
+        <button class="btn btn-ghost btn-sm" onclick="showScreen('hub')">← Hub</button>
+      </div>
+    </div>
+    <div class="training-body" id="training-body">
+      <div class="empty-state" style="margin:auto;padding-top:80px">
+        <div style="font-size:2rem;margin-bottom:16px">📚</div>
+        Selecione um módulo na barra lateral para começar os exercícios.
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Toast -->
 <div id="toast"></div>
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════════
      JAVASCRIPT
-══════════════════════════════════════ -->
+══════════════════════════════ -->
 <script>
 /* ─── STATE ─── */
 const STATE = {
-  apiKey: '',
-  adventure: { title:'', premise:'', tone:'', hooks:'' },
-  characters: [],
-  history: [],     // { type:'narration'|'round', narration, playersRaw, orientadorRaw, arbitroRaw, ts }
-  round: 0,
-  loading: false,
+  apiKey:'',
+  adventure:{title:'',premise:'',tone:'',hooks:''},
+  characters:[],
+  history:[],
+  round:0,
+  loading:false,
+  training:{completed:{}},
 };
 
-const CLASS_EMOJIS = {
-  fighter:'⚔️', wizard:'🧙', rogue:'🗡️', cleric:'✨', ranger:'🏹',
-  paladin:'🛡️', barbarian:'💢', bard:'🎵', druid:'🌿', monk:'🥋',
-  sorcerer:'🔥', warlock:'👁️',
-};
-const CLASS_KEYS = {
-  'Guerreiro':'fighter','Mago':'wizard','Ladino':'rogue','Clérigo':'cleric',
-  'Patrulheiro':'ranger','Paladino':'paladin','Bárbaro':'barbarian',
-  'Bardo':'bard','Druida':'druid','Monge':'monk','Feiticeiro':'sorcerer','Bruxo':'warlock',
-};
+const CLASS_EMOJIS={fighter:'⚔️',wizard:'🧙',rogue:'🗡️',cleric:'✨',ranger:'🏹',paladin:'🛡️',barbarian:'💢',bard:'🎵',druid:'🌿',monk:'🥋',sorcerer:'🔥',warlock:'👁️'};
+const CLASS_KEYS={'Guerreiro':'fighter','Mago':'wizard','Ladino':'rogue','Clérigo':'cleric','Patrulheiro':'ranger','Paladino':'paladin','Bárbaro':'barbarian','Bardo':'bard','Druida':'druid','Monge':'monk','Feiticeiro':'sorcerer','Bruxo':'warlock'};
+
+/* ─── TRAINING MODULES ─── */
+const TRAINING_MODULES = [
+  {
+    id:'m1', icon:'👁️', name:'Descrever Ambientes',
+    subtitle:'Da cena vaga à cena que o jogador sente na pele',
+    intro:`O grande guia <em>A Arte de Narrar</em> ensina que uma boa descrição tem três partes: <strong>o gancho</strong> (algo que chame atenção imediatamente), <strong>os detalhes</strong> (2-3 elementos concretos com múltiplos sentidos) e <strong>a abertura</strong> (deixar o jogador livre para agir).\n\nA maioria dos mestres descreve apenas o que se vê. Use pelo menos dois sentidos além da visão — audição, olfato, tato e paladar transformam uma cena genérica em imagem vívida.`,
+    examples:[
+      {label:'Entrada do Calabouço',bad:'Vocês chegam à entrada do calabouço. Há uma escada descendo para baixo e está escuro lá dentro.',good:'A escada desce para a escuridão como uma garganta aberta. A pedra das paredes está úmida — fria na ponta dos dedos. Lá de baixo sobe um cheiro pesado de terra e algo mais: podridão, talvez. Uma tocha sua mal alcança cinco passos à frente. Além disso, só breu.',note:'Saímos do genérico ("está escuro") para o específico ("breu", "fria na ponta dos dedos"). A metáfora "garganta aberta" cria sensação de perigo sem dizer "é perigoso".'},
+      {label:'Taverna Movimentada',bad:'Vocês entram na taverna. Há muita gente dentro, barulho e fumaça. O taverneiro está atrás do balcão.',good:'A taverna explode de ruído quando vocês abrem a porta: risadas, copos batendo, uma discussão num canto que pode virar briga. A fumaça dos cachimbos torna o ar espesso. No balcão, um homem enorme limpa o mesmo copo há tempo demais, de olho em vocês desde que a porta abriu.',note:'Detalhamos os sons, transformamos "fumaça" em sensação física ("ar espesso"), e o taverneiro ganhou uma ação específica que cria suspense silencioso.'},
+    ],
+    exercises:[
+      {id:'1.1',title:'Reescreva com os Sentidos',prompt:'Reescreva cada cena usando pelo menos dois sentidos além da visão. Use o agente IA para receber feedback detalhado.',items:['Cena A: "Vocês chegam à praça da cidade. Há muita gente e um mercado."','Cena B: "O quarto do mago está cheio de livros e coisas estranhas."','Cena C: "Vocês atravessam a ponte sobre o rio."'],placeholder:'Escreva sua reescrita aqui... Use olfato, sons, temperatura, texturas. Seja específico: "madeira úmida rangendo sob os passos" é melhor que "a ponte estava velha".'},
+      {id:'1.2',title:'Descrição em 3 Camadas',prompt:'Escolha um ambiente e escreva três versões: 1 frase (o gancho), 3 frases (com detalhes) e 6 frases (imersiva completa com 3+ sentidos).',placeholder:'Ambiente escolhido: [descreva qual]\n\n1 frase (gancho):\n...\n\n3 frases (ambiente + detalhe + abertura):\n...\n\n6 frases (imersiva, 3+ sentidos):\n...'},
+      {id:'1.3',title:'O Detalhe que Conta uma História',prompt:'Escreva 5 detalhes de ambiente que impliquem algo sem explicar diretamente. Ex: "uma cadeira tombada perto da lareira, com uma xícara ainda com chá" — sugere que alguém saiu com pressa. Anote entre parênteses o que cada um implica.',placeholder:'Detalhe 1: ... (implica: ...)\nDetalhe 2: ... (implica: ...)\nDetalhe 3: ... (implica: ...)\nDetalhe 4: ... (implica: ...)\nDetalhe 5: ... (implica: ...)'},
+    ],
+    challenge:{title:'⚔ Desafio Avançado: Impro em 60 Segundos',body:'Peça para alguém dizer uma palavra aleatória. Você tem 60 segundos para improvisar a descrição de um ambiente que tenha esse elemento como centro. Faça isso 3 vezes e envie as três descrições para análise do agente.'}
+  },
+  {
+    id:'m2', icon:'🎭', name:'NPCs e Vozes',
+    subtitle:'Como dar vida a personagens em segundos',
+    intro:`NPCs memoráveis não precisam de horas de backstory. Precisam de <strong>três coisas</strong>: uma aparência que diz algo, uma forma de falar distinta, e um objetivo claro naquela cena.\n\nAntes de falar por qualquer NPC importante, responda mentalmente: <em>O que ele quer nessa cena?</em> Esse pensamento vai guiar tudo — mesmo sem você perceber. Pequenas variações fazem milagres: velocidade de fala, volume, vocabulário e jeitos de falar únicos.`,
+    examples:[
+      {label:'Informante',bad:'Um homem se aproxima. Ele é nervoso e sabe de alguma coisa. Ele diz para vocês irem ao porto às meia-noite.',good:'O homem encosta na parede ao lado de vocês sem virar o rosto. Fala rápido, quase sem abrir a boca: "Porto. Meia-noite. Vão sozinhos." Pausa. "Não perguntem como eu sei." Já está se afastando antes que vocês possam responder.',note:'A postura ("encosta na parede sem virar o rosto") já define o personagem. A fala em fragmentos comunica urgência. Ele sair antes de responder mantém o mistério.'},
+      {label:'Nobre Arrogante',bad:'Um nobre se aproxima. Ele é arrogante e não gosta dos aventureiros. Ele diz que eles não são bem-vindos.',good:'O homem veste mais ouro do que a maioria das pessoas vê em um ano. Ele os examina de cima a baixo — sem pressa, como quem avalia gado num mercado. "Interessante. Aventureiros. No meu salão." Uma pausa calculada. "Torçam para que eu esteja com boa vontade esta noite."',note:'O detalhe do ouro estabelece status sem dizer "é rico". O olhar "como quem avalia gado" é humilhante e específico. A ameaça velada é mais assustadora que uma direta.'},
+    ],
+    exercises:[
+      {id:'2.1',title:'Criação Rápida de NPC',prompt:'Para cada perfil, escreva: uma descrição visual de 1 frase, como ele fala, e uma fala de abertura ao encontrar os personagens. Envie para o agente avaliar a consistência de cada NPC.',items:['Perfil A: camponês que sabe de algo, mas tem medo de falar','Perfil B: comerciante que tenta enganar os personagens','Perfil C: soldado que perdeu a guerra e está à deriva na vida'],placeholder:'Perfil A:\nVisual: ...\nComo fala: ...\nFala de abertura: ...\n\nPerfil B:\nVisual: ...\nComo fala: ...\nFala de abertura: ...\n\nPerfil C:\nVisual: ...\nComo fala: ...\nFala de abertura: ...'},
+      {id:'2.2',title:'A Mesma Cena, Três Vozes',prompt:'Situação: os personagens chegam a um vilarejo que foi atacado na noite anterior. Narre a chegada contada por três NPCs diferentes com vozes e reações distintas.',items:['NPC 1: prefeito assustado e em pânico','NPC 2: sobrevivente frio, que já viu coisas piores','NPC 3: criança que não entende bem o que aconteceu'],placeholder:'NPC 1 (prefeito em pânico):\n"..."\n\nNPC 2 (sobrevivente frio):\n"..."\n\nNPC 3 (criança):\n"..."'},
+      {id:'2.3',title:'Improvise a Reação',prompt:'Crie um NPC com agenda própria, depois escreva como ele reage a três abordagens diferentes. O agente avaliará a consistência das reações.',placeholder:'Meu NPC: [nome], quer: [objetivo], esconde: [segredo]\n\nReação 1 (amigável): ...\nReação 2 (ameaça velada): ...\nReação 3 (sabem seu segredo): ...'},
+    ],
+    challenge:{title:'⚔ Desafio Avançado: NPCs ao Vivo',body:'Escreva uma cena de interrogatório com 3 NPCs de personalidades completamente opostas respondendo às mesmas perguntas. O agente vai avaliar se cada voz é realmente distinta e coerente.'}
+  },
+  {
+    id:'m3', icon:'😰', name:'Construindo Tensão',
+    subtitle:'Como criar suspense sem que ninguém role um dado',
+    intro:`Tensão é expectativa. É o espaço entre <em>"algo vai acontecer"</em> e <em>"aconteceu"</em>. Quanto mais você souber controlar esse espaço, mais poderosas serão suas cenas.\n\nFerramentas essenciais: <strong>contagem regressiva</strong> (prazo claro), <strong>stakes explícitos</strong> (o que está em jogo), <strong>informação incompleta</strong> (sabem que há perigo, não onde), <strong>silêncio calculado</strong> (pause após revelar algo importante).`,
+    examples:[
+      {label:'Encontrando o Vilão',bad:'O vilão está sentado na cadeira. Ele os recebe e diz que sabia que eles viriam. Ele parece perigoso.',good:'Ele está de costas quando vocês entram. Não se vira. "Demorou mais do que esperava." A cadeira gira devagar — e vocês percebem que ele segurava uma xícara de chá o tempo todo, sem fazer barulho. Ele bebe, coloca a xícara com cuidado. Só então olha para vocês. "Sentem-se. Isto pode demorar."',note:'A postura de costas cria antecipação. A xícara (ele estava calmo o tempo todo) é desconcertante. A pausa antes de olhar estabelece quem tem controle.'},
+      {label:'Corredor com Ameaça',bad:'Vocês estão explorando o corredor. Há um inimigo na próxima sala. Sejam cuidadosos.',good:'O corredor dobra à esquerda. Antes de virarem — vocês ouvem. Respiração pesada. O tipo que se faz depois de carregar algo muito pesado, ou logo antes de... Silêncio. E então, lentamente, uma sombra começa a se projetar pela parede.',note:'Interrompemos a descrição com o som antes da curva — isso transfere a tensão para a cabeça dos jogadores. A sombra crescendo substitui "há um monstro" por uma imagem cinematográfica.'},
+    ],
+    exercises:[
+      {id:'3.1',title:'Construa em Três Batidas',prompt:'Escreva uma situação em três versões: tensão baixa, média e alta. Cada versão deve ter no máximo 5 frases. O agente vai analisar a progressão.',items:['Situação A: os personagens percebem que estão sendo seguidos','Situação B: chegam a um local e algo está claramente errado','Situação C: um aliado demora mais do que devia para responder'],placeholder:'Situação escolhida: ...\n\nTensão baixa:\n...\n\nTensão média:\n...\n\nTensão alta:\n...'},
+      {id:'3.2',title:'Reescreva Sem Dizer o Que É',prompt:'Tensão real não nomeia a ameaça — ela a implica. Reescreva as frases abaixo sem usar as palavras entre colchetes, apenas ações e detalhes observáveis.',items:['"Havia um [monstro] na câmara."','"O lugar era [assustador]."','"O homem era claramente [perigoso]."','"Algo [ruim] estava para acontecer."'],placeholder:'Versão 1 (sem "monstro"):\n...\n\nVersão 2 (sem "assustador"):\n...\n\nVersão 3 (sem "perigoso"):\n...\n\nVersão 4 (sem "ruim"):\n...'},
+      {id:'3.3',title:'A Pausa Calculada',prompt:'Escreva uma cena curta (5-8 frases) onde a tensão máxima vem de um silêncio ou ação vagarosa antes da revelação. Use [pausa] para indicar onde ela estaria na narração real.',placeholder:'Sua cena com [pausa] marcada:\n...'},
+    ],
+    challenge:{title:'⚔ Desafio Avançado: A Cena Sem Dados',body:'Monte uma situação de tensão completa — do tipo que normalmente viraria um combate — e narre ela inteira sem pedir nenhuma rolagem. Use apenas a narração para criar e resolver a tensão. Envie para o agente analisar onde a tensão funciona e onde poderia ser mais intensa.'}
+  },
+  {
+    id:'m4', icon:'🔍', name:'Mostrar, Não Contar',
+    subtitle:'A técnica que separa narrações medianas de inesquecíveis',
+    intro:`"Contar" é dar a informação direto. "Mostrar" é apresentar evidências e deixar o jogador chegar à conclusão.\n\nA versão "mostrada" cria muito mais engajamento porque o jogador se torna <strong>participante ativo</strong> da narrativa — não receptor passivo. Deixe os jogadores chegarem às conclusões sozinhos. Isso cria memórias mais fortes.`,
+    examples:[
+      {label:'NPC Está Mentindo',bad:'Ele está mentindo. Parece nervoso enquanto fala.',good:'Enquanto responde, ele organiza os papéis na mesa — embora já estivessem organizados. A história bate em todos os detalhes. Detalhes demais, na verdade. Como se tivesse sido ensaiada.',note:'Não dissemos "está mentindo" nem "está nervoso". Mostramos o comportamento e um raciocínio. Os jogadores chegam à conclusão sozinhos.'},
+      {label:'Cidade Opressiva',bad:'A cidade é controlada por um regime cruel. As pessoas têm medo.',good:'Ninguém faz contato visual. Os vendedores do mercado anunciam os preços com a cabeça baixa. Uma mulher começa a rir de algo que o filho fez — e para no meio, como se lembrasse de algo. Quando vocês perguntam o caminho para a guarda, o homem dá as instruções e se afasta rápido. Muito rápido.',note:'Cada detalhe é um comportamento observável. O jogador monta o quadro de opressão a partir das peças — muito mais impactante que "as pessoas têm medo".'},
+    ],
+    exercises:[
+      {id:'4.1',title:'Converta de Contar para Mostrar',prompt:'Transforme cada afirmação em uma cena de 2-4 frases usando apenas ações e detalhes observáveis. Não use a palavra entre colchetes nem sinônimos diretos.',items:['"[Ele é covarde.]"','"[O lugar foi abandonado há muito tempo.]"','"[Ela está apaixonada por ele.]"','"[O grupo está desconfiado uns dos outros.]"','"[O objeto tem muito valor para ela.]"'],placeholder:'1. Covarde (sem usar essa palavra):\n...\n\n2. Abandonado (sem usar essa palavra):\n...\n\n3. Apaixonada:\n...\n\n4. Desconfiança:\n...\n\n5. Objeto valioso:\n...'},
+      {id:'4.2',title:'O Objeto que Conta a História',prompt:'Descreva um objeto que, sozinho, implique cada situação abaixo. Máximo 4 frases por objeto. Nenhuma frase deve explicar diretamente o que ele implica.',items:['Havia uma família aqui','Algo violento aconteceu','Alguém estava fugindo de algo'],placeholder:'Objeto 1 (família):\n...\n\nObjeto 2 (algo violento):\n...\n\nObjeto 3 (fuga):\n...'},
+      {id:'4.3',title:'Cena sem Adjetivos de Emoção',prompt:'Escreva uma cena emocionalmente carregada sem usar as palavras proibidas nem sinônimos diretos. Só ações, comportamentos e detalhes físicos. Entre 6 e 10 frases.\n\nProibido: triste, feliz, com raiva, assustado, aliviado, ansioso, preocupado',placeholder:'Emoção escolhida (anote aqui, mas não use na cena): ...\n\nSua cena:\n...'},
+    ],
+    challenge:{title:'⚔ Desafio Avançado: Sessão Mostrar-Não-Contar',body:'Escreva uma cena de 10-15 frases revelando três informações diferentes sobre o mundo ou NPCs — sem usar nenhum adjetivo de qualidade direta. O agente vai identificar cada revelação e avaliar se foram mostradas ou contadas.'}
+  },
+  {
+    id:'m5', icon:'🌅', name:'Abrir e Encerrar',
+    subtitle:'As primeiras e últimas palavras da sessão são as que ficam',
+    intro:`Os jogadores lembram do início e do fim de uma sessão muito mais do que do miolo. Uma <strong>abertura forte</strong> engaja imediatamente. Um <strong>encerramento forte</strong> cria desejo de voltar.\n\nEvite começar com "bom, vamos continuar de onde paramos". Jogue os personagens direto em algo acontecendo — eles reagem melhor quando já há tensão ou curiosidade no ar.`,
+    examples:[
+      {label:'Abertura de Sessão',bad:'Bom, vamos continuar de onde paramos. Vocês estavam na taverna. O que fazem?',good:'Os sinos da cidade estão tocando antes do amanhecer. Isso nunca acontece. Quando vocês abrem as janelas, a rua está cheia de guardas correndo em uma direção — e os habitantes correndo na outra.',note:'A abertura fraca devolve o controle sem criar contexto. A abertura forte cria uma situação ativa — algo já está acontecendo e os personagens precisam reagir.'},
+      {label:'Recap Cinematográfico',bad:'Então... na última sessão vocês foram à torre do mago e descobriram que ele estava morto. Depois foram ao porto. Certo?',good:'"Três dias atrás, vocês abriram a porta de Aldric e encontraram um cadáver no lugar do mago. Ontem, o porto mostrou que o navio partiu com uma hora de antecedência — como se soubessem que vocês vinham. Hoje, a estalagem onde dormiam foi revistada enquanto estavam fora. Quem quer que seja, chegou a vocês antes que vocês chegassem a ele."',note:'O bom recap não lista o que aconteceu — conta uma história com ritmo, conecta os pontos e cria urgência para o presente.'},
+    ],
+    exercises:[
+      {id:'5.1',title:'Três Aberturas para a Mesma Situação',prompt:'Situação: os personagens precisam investigar a morte do líder da cidade. Escreva três aberturas diferentes — cada uma com tom e técnica distintos.',items:['Em cena: jogando os personagens direto na ação','De recap: conectando o passado com o que vem agora','Atmosférica: começa com ambiente antes da ação'],placeholder:'Abertura em cena:\n...\n\nAbertura de recap:\n...\n\nAbertura atmosférica:\n...'},
+      {id:'5.2',title:'O Encerramento Perfeito',prompt:'Para cada tipo de sessão, escreva um encerramento de até 5 frases com o tom pedido E um elemento que crie desejo de voltar.',items:['Sessão de ação intensa — encerramento aliviante com gancho sutil','Sessão de drama emocional — encerramento que honra o peso do que aconteceu','Sessão de mistério — adiciona uma peça ao puzzle mas cria nova pergunta'],placeholder:'Sessão de ação:\n...\n\nSessão de drama:\n...\n\nSessão de mistério:\n...'},
+      {id:'5.3',title:'O Recap Cinematográfico',prompt:'Escreva um recap de 3 sessões fictícias como o "previously on..." de uma série — conectando eventos com ritmo narrativo, não como lista. Máximo de 8 frases.',placeholder:'Seu recap cinematográfico:\n...'},
+    ],
+    challenge:{title:'⚔ Desafio: O Teste da Abertura',body:'Escreva 3 aberturas para a mesma situação: uma que começa com som, uma que começa com visão, e uma que começa com a fala direta de um NPC. O agente vai avaliar qual cria mais urgência e por quê.'}
+  },
+  {
+    id:'m6', icon:'⚡', name:'Improvisar com Confiança',
+    subtitle:'Treinos para quando o plano vai por água abaixo',
+    intro:`Improvisação não é ausência de preparo — é preparo de um tipo diferente. Em vez de preparar conteúdo, você prepara <strong>instintos</strong>.\n\nO princípio do "Sim": quando um jogador propõe algo que você não planejou, resista ao instinto de dizer não. "Sim" não significa que tudo vai funcionar perfeitamente — significa que a ideia entra no mundo e tem consequências. Use <em>"Sim, e..."</em>, <em>"Sim, mas..."</em> ou <em>"Não, e além disso..."</em>.`,
+    examples:[
+      {label:'Jogadores Saem do Roteiro',bad:'"Isso não vai funcionar. O guarda sabe que vocês não são embaixadores." [forçar o roteiro]',good:'Mestre: "Interessante. Façam Enganação." [rolagem mediocre] "O guarda olha para os documentos. Olha de novo. — Esperem aqui." Ele entra no castelo. Dez minutos. Quinze. Vinte. Então vocês escutam cavalos. Não um. Vários. O que fazem?',note:'A saída inesperada virou uma cena de tensão melhor do que o plano original. A improvisação gerou consequências interessantes em vez de apenas "sim" ou "não".'},
+      {label:'NPC Inventado na Hora',bad:'"Tem um guarda aqui. Ele para vocês e pergunta quem são."',good:'O guarda — Durren, pelos colegas que o chamam de longe — tem um corte fresco no lábio. Parece que alguém o pôs no lugar recentemente. Ele olha para vocês com expressão de quem não quer mais problema por hoje.',note:'Três elementos em dez segundos: nome (Durren), detalhe físico que implica história (corte), estado emocional que guia a cena (não quer problema). Suficiente para uma cena inteira.'},
+    ],
+    exercises:[
+      {id:'6.1',title:'Sim, E — Em Cadeia',prompt:'Escreva uma cena de improvisação em cadeia: o jogador faz uma ação inesperada, e você responde com "Sim, e... mas então...". Faça pelo menos 4 trocas, escalando as consequências.',placeholder:'Ação inicial do jogador (invente): ...\n\nTroca 1 (Mestre — sim, e...):\n...\n\nTroca 2 (jogador reage):\n...\nMestre (mas então...):\n...\n\nTroca 3 (escalando):\n...\n\nTroca 4 (resolução ou novo cliffhanger):\n...'},
+      {id:'6.2',title:'O NPC em 10 Segundos',prompt:'Para cada situação, crie um NPC instantâneo com: nome, uma característica física que implica história, e o que quer nessa cena. Escreva sem parar, sem editar.',items:['A: mensageiro que chega com urgência','B: passante que viu algo suspeito','C: guarda que está com remorso','D: comerciante que esconde algo no estoque'],placeholder:'NPC A:\nNome: | Visual: | Quer: \n\nNPC B:\nNome: | Visual: | Quer: \n\nNPC C:\nNome: | Visual: | Quer: \n\nNPC D:\nNome: | Visual: | Quer: '},
+      {id:'6.3',title:'Banco de Improvisação',prompt:'Monte seu banco pessoal de recursos de improviso. O agente vai sugerir variações e melhorias para cada lista.',placeholder:'10 nomes para NPCs masculinos:\n...\n\n10 nomes para NPCs femininos:\n...\n\n5 complicações inesperadas:\n...\n\n5 segredos de NPC (use em qualquer momento):\n...\n\n5 locais de passagem:\n...'},
+    ],
+    challenge:{title:'⚔ Desafio Avançado: Sessão Zero-Prep',body:'Narre uma cena inteira de improviso: receba 3 palavras aleatórias do agente e crie uma cena de abertura de sessão coerente usando todas as três. O agente vai avaliar fluidez, coerência e uso das palavras.'}
+  },
+  {
+    id:'m7', icon:'⚔️', name:'Combate com Vida',
+    subtitle:'Transformar rolagens em cenas cinematográficas',
+    intro:`Combate em RPG pode ser mecânico e entediante — ou pode ser uma das cenas mais intensas da sessão. A diferença está em quanto de narrativa você coloca dentro da mecânica.\n\nNão diga apenas "você acerta por 8 de dano". Descreva a <strong>reação do inimigo</strong>, o <strong>impacto visual</strong>, e <strong>devolva urgência</strong> para o jogador. Inimigos com personalidade (que gritam, xingam, se rendem, fogem) são infinitamente mais memoráveis que bonecos de HP.`,
+    examples:[
+      {label:'Descrevendo um Ataque',bad:'Você acerta o goblin por 7 de dano. É sua vez de novo.',good:'Sua lâmina atravessa a guarda do goblin e encontra o ombro dele — ele grita, recua dois passos, olha para o ferimento com choque. A raiva vem depois do susto. Ele te olha nos olhos agora. É sua vez.',note:'As reações do inimigo (choque antes da raiva) criam uma progressão emocional. "Te olha nos olhos" devolve a urgência para o jogador.'},
+      {label:'Inimigo Sendo Derrotado',bad:'O inimigo fica sem PV e morre.',good:'O último golpe o manda contra a parede. Ele escorrega, deixa uma marca vermelha na pedra. Tenta se levantar uma vez — não consegue. A espada cai. Ele não está morto ainda, mas a batalha acabou para ele. O que vocês fazem?',note:'A derrota tem três momentos (pancada, tentativa de levantar, queda da espada). A pergunta final cria uma decisão moral — matar, capturar, interrogar.'},
+    ],
+    exercises:[
+      {id:'7.1',title:'Descreva 5 Ataques de Forma Diferente',prompt:'Um guerreiro acerta um inimigo com uma espada por 8 de dano. Escreva 5 descrições do mesmo ataque, cada uma com um tom diferente. O agente vai avaliar a variedade e a cinematografia de cada uma.',items:['Brutal e pesado','Técnico e preciso','Desesperado / na base da sorte','Elegante / quase artístico','Com consequência emocional para o atacante'],placeholder:'1. Brutal:\n...\n\n2. Técnico:\n...\n\n3. Desesperado:\n...\n\n4. Elegante:\n...\n\n5. Emocional:\n...'},
+      {id:'7.2',title:'Monte um Combate com Ambiente Vivo',prompt:'Escreva as primeiras 4 rodadas de um combate onde o ambiente muda ativamente. Cada rodada: o que um personagem faz, o que o ambiente faz, e a nova pressão criada.',placeholder:'Cenário: biblioteca em chamas com inimigos bloqueando a saída\n\nRodada 1:\n...\n\nRodada 2:\n...\n\nRodada 3:\n...\n\nRodada 4:\n...'},
+      {id:'7.3',title:'O Golpe Final do Jogador',prompt:'Escreva um combate de 6-8 linhas que termina com o Mestre passando o golpe final para o jogador decidir. Depois escreva 3 formas diferentes que o jogador poderia terminar, e sua resposta de Mestre para cada uma.',placeholder:'O combate (chegando ao golpe final):\n...\n\nJogador 1 (acaba de forma brutal):\n"[ação do jogador]"\nMestre: ...\n\nJogador 2 (tenta capturar):\n"[ação do jogador]"\nMestre: ...\n\nJogador 3 (offe a rendição):\n"[ação do jogador]"\nMestre: ...'},
+    ],
+    challenge:{title:'⚔ Desafio: Renarre um Combate',body:'Escreva um combate de 3 rodadas como um "scene report cinematográfico" — narrando cada ação como se fosse uma cena de filme de ação. Sem linguagem mecânica. O agente vai identificar onde ficou vivo e onde ficou genérico.'}
+  },
+];
+
+let currentTrainingModule = null;
+let exerciseResponses = {};
 
 /* ─── BOOT ─── */
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', ()=>{
   const saved = localStorage.getItem('mdm_api_key');
-  if(saved){ STATE.apiKey = saved; showScreen('setup'); initSetup(); }
-  else { showScreen('api'); }
+  if(saved){ STATE.apiKey = saved; showScreen('hub'); }
+  else showScreen('api');
+  const savedTraining = localStorage.getItem('mdm_training');
+  if(savedTraining){ try{ STATE.training = JSON.parse(savedTraining); }catch(e){} }
+  buildTrainingNav();
+  // prefill setup
+  if(STATE.characters.length===0) addCharacter(), addCharacter();
+  renderChars();
+  updateAddBtn();
 });
 
 /* ─── SCREENS ─── */
@@ -925,539 +628,418 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
 }
-
 function goToApiScreen(){ showScreen('api'); }
-function goToSetup(){ showScreen('setup'); initSetup(); }
+function goToSetup(){ showScreen('setup'); }
+function goToSession(){
+  if(!STATE.adventure.title){ toast('⚠ Configure a aventura primeiro.'); showScreen('setup'); return; }
+  buildSessionUI(); showScreen('session');
+}
+function goToTraining(){ showScreen('training'); }
 
 /* ─── API KEY ─── */
 function handleApiKey(){
-  const key = document.getElementById('api-key-input').value.trim();
+  const key=document.getElementById('api-key-input').value.trim();
   if(!key){ toast('⚠ Insira a chave API.'); return; }
-  STATE.apiKey = key;
-  localStorage.setItem('mdm_api_key', key);
-  showScreen('setup');
-  initSetup();
+  STATE.apiKey=key;
+  localStorage.setItem('mdm_api_key',key);
+  showScreen('hub');
 }
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('screen-api').classList.contains('active')) handleApiKey();
+});
 
-/* ─── SETUP ─── */
-let charCount = 0;
-
-function initSetup(){
-  if(STATE.characters.length === 0) addCharacter(), addCharacter();
-  renderChars();
-  updateAddBtn();
-}
-
+/* ─── SETUP / CHARACTERS ─── */
 function addCharacter(){
-  if(STATE.characters.length >= 4){ toast('Máximo de 4 personagens.'); return; }
-  STATE.characters.push({ name:'', race:'', class:'Guerreiro', background:'', motivation:'', personality:'' });
-  renderChars();
-  updateAddBtn();
+  if(STATE.characters.length>=4){ toast('Máximo de 4 personagens.'); return; }
+  STATE.characters.push({name:'',race:'',class:'Guerreiro',background:'',motivation:'',personality:''});
+  renderChars(); updateAddBtn();
 }
-
 function removeCharacter(idx){
-  if(STATE.characters.length <= 1){ toast('Mínimo de 1 personagem.'); return; }
-  STATE.characters.splice(idx,1);
-  renderChars();
-  updateAddBtn();
+  if(STATE.characters.length<=1){ toast('Mínimo de 1 personagem.'); return; }
+  STATE.characters.splice(idx,1); renderChars(); updateAddBtn();
 }
-
 function updateAddBtn(){
-  const btn = document.getElementById('add-char-btn');
-  if(btn) btn.style.display = STATE.characters.length >= 4 ? 'none' : 'block';
+  const btn=document.getElementById('add-char-btn');
+  if(btn) btn.style.display=STATE.characters.length>=4?'none':'block';
 }
-
 function renderChars(){
-  const grid = document.getElementById('chars-grid');
-  const classOptions = Object.keys(CLASS_KEYS).map(c=>`<option value="${c}">${c}</option>`).join('');
-  grid.innerHTML = STATE.characters.map((ch,i)=>`
-    <div class="char-card" id="char-card-${i}">
+  const grid=document.getElementById('chars-grid');
+  grid.innerHTML=STATE.characters.map((ch,i)=>`
+    <div class="char-card">
       <div class="char-card-header">
         <span class="char-number">Personagem ${i+1}</span>
-        <button class="remove-char" onclick="removeCharacter(${i})" title="Remover">✕</button>
+        <button class="remove-char" onclick="removeCharacter(${i})">✕</button>
       </div>
       <div class="setup-grid-2">
-        <div class="field-group" style="margin-bottom:12px">
-          <label>Nome</label>
-          <input type="text" value="${esc(ch.name)}" onchange="updateChar(${i},'name',this.value)" placeholder="Thorin"/>
-        </div>
-        <div class="field-group" style="margin-bottom:12px">
-          <label>Raça</label>
-          <input type="text" value="${esc(ch.race)}" onchange="updateChar(${i},'race',this.value)" placeholder="Anão"/>
-        </div>
+        <div class="field-group" style="margin-bottom:12px"><label>Nome</label><input type="text" value="${esc(ch.name)}" onchange="updateChar(${i},'name',this.value)" placeholder="Thorin"/></div>
+        <div class="field-group" style="margin-bottom:12px"><label>Raça</label><input type="text" value="${esc(ch.race)}" onchange="updateChar(${i},'race',this.value)" placeholder="Anão"/></div>
       </div>
-      <div class="field-group" style="margin-bottom:12px">
-        <label>Classe</label>
-        <select onchange="updateChar(${i},'class',this.value)">
-          ${Object.keys(CLASS_KEYS).map(c=>`<option value="${c}" ${ch.class===c?'selected':''}>${c}</option>`).join('')}
-        </select>
-      </div>
-      <div class="field-group" style="margin-bottom:12px">
-        <label>Background (história)</label>
-        <textarea rows="2" onchange="updateChar(${i},'background',this.value)" placeholder="Filho de comerciante falido, cresceu nas ruas de Baldur's Gate...">${esc(ch.background)}</textarea>
-      </div>
-      <div class="field-group" style="margin-bottom:12px">
-        <label>Motivação</label>
-        <input type="text" value="${esc(ch.motivation)}" onchange="updateChar(${i},'motivation',this.value)" placeholder="Restaurar a honra da família"/>
-      </div>
-      <div class="field-group" style="margin-bottom:0">
-        <label>Personalidade (traços)</label>
-        <input type="text" value="${esc(ch.personality)}" onchange="updateChar(${i},'personality',this.value)" placeholder="Sarcástico, leal aos amigos, desconfia de magia"/>
-      </div>
-    </div>
-  `).join('');
+      <div class="field-group" style="margin-bottom:12px"><label>Classe</label><select onchange="updateChar(${i},'class',this.value)">${Object.keys(CLASS_KEYS).map(c=>`<option value="${c}"${ch.class===c?' selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="field-group" style="margin-bottom:12px"><label>Background</label><textarea rows="2" onchange="updateChar(${i},'background',this.value)" placeholder="Filho de comerciante falido...">${esc(ch.background)}</textarea></div>
+      <div class="field-group" style="margin-bottom:12px"><label>Motivação</label><input type="text" value="${esc(ch.motivation)}" onchange="updateChar(${i},'motivation',this.value)" placeholder="Restaurar a honra da família"/></div>
+      <div class="field-group" style="margin-bottom:0"><label>Personalidade</label><input type="text" value="${esc(ch.personality)}" onchange="updateChar(${i},'personality',this.value)" placeholder="Sarcástico, leal, desconfia de magia"/></div>
+    </div>`).join('');
 }
-
-function updateChar(idx, field, val){
-  STATE.characters[idx][field] = val;
-}
-
+function updateChar(idx,field,val){ STATE.characters[idx][field]=val; }
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-/* ─── EXAMPLE DATA ─── */
 function fillExample(){
-  document.getElementById('adv-title').value = 'A Cripta dos Reis Silenciosos';
-  document.getElementById('adv-premise').value = 'Na cidade de Thornwall, mercadores desaparecem durante a noite. A guilda de ladrões afirma inocência. Rumores apontam para uma antiga cripta sob a cidade velha, selada há dois séculos. O prefeito oferece 500 po para qualquer grupo que resolva o mistério — discretamente.';
-  document.getElementById('adv-tone').value = 'sombrio e tenso';
-  document.getElementById('adv-hooks').value = 'Recompensa da guilda, um dos desaparecidos é parente de Mira, Zephyr busca artefato listado nos rumores';
-
-  STATE.characters = [
-    { name:'Gareth Ferro', race:'Humano', class:'Guerreiro', background:'Ex-soldado da Guarda Real, dispensado após denunciar corrupção.', motivation:'Provar que ainda é digno de confiança', personality:'Direto, honesto até a rudeza, protege os mais fracos' },
-    { name:'Mira Saltfingers', race:'Halfling', class:'Ladino', background:'Cresceu nas ruas de Thornwall, conhece cada beco e segredo da cidade.', motivation:'Encontrar seu primo desaparecido', personality:'Curiosa, fala demais, sempre com um plano B' },
-    { name:'Zephyr Vane', race:'Elfo', class:'Mago', background:'Estudioso da Academia Arcana, veio estudar a magia esquecida dos reis antigos.', motivation:'Descobrir o segredo do selo da cripta', personality:'Arrogante com ignorantes, fascinado por qualquer coisa antiga, relutante em se arriscar fisicamente' },
+  document.getElementById('adv-title').value='A Cripta dos Reis Silenciosos';
+  document.getElementById('adv-premise').value='Na cidade de Thornwall, mercadores desaparecem durante a noite. Rumores apontam para uma antiga cripta sob a cidade velha, selada há dois séculos. O prefeito oferece 500 po para qualquer grupo que resolva o mistério.';
+  document.getElementById('adv-tone').value='sombrio e tenso';
+  document.getElementById('adv-hooks').value='Recompensa da guilda, primo desaparecido de Mira, Zephyr busca artefato arcano';
+  STATE.characters=[
+    {name:'Gareth Ferro',race:'Humano',class:'Guerreiro',background:'Ex-soldado da Guarda Real, dispensado após denunciar corrupção.',motivation:'Provar que ainda é digno de confiança',personality:'Direto, honesto até a rudeza, protege os mais fracos'},
+    {name:'Mira Saltfingers',race:'Halfling',class:'Ladino',background:'Cresceu nas ruas de Thornwall, conhece cada beco e segredo da cidade.',motivation:'Encontrar seu primo desaparecido',personality:'Curiosa, fala demais, sempre com um plano B'},
+    {name:'Zephyr Vane',race:'Elfo',class:'Mago',background:'Estudioso da Academia Arcana, veio estudar a magia esquecida dos reis antigos.',motivation:'Descobrir o segredo do selo da cripta',personality:'Arrogante com ignorantes, fascinado por coisas antigas, relutante em se arriscar'},
   ];
-  renderChars();
-  updateAddBtn();
-  toast('✨ Exemplo carregado!');
+  renderChars(); updateAddBtn(); toast('✨ Exemplo carregado!');
 }
 
-/* ─── START SESSION ─── */
 function startSession(){
-  const title = document.getElementById('adv-title').value.trim();
+  const title=document.getElementById('adv-title').value.trim();
   if(!title){ toast('⚠ Insira o título da aventura.'); return; }
-  if(STATE.characters.length === 0){ toast('⚠ Adicione pelo menos 1 personagem.'); return; }
+  if(!STATE.characters.length){ toast('⚠ Adicione pelo menos 1 personagem.'); return; }
   for(let i=0;i<STATE.characters.length;i++){
-    if(!STATE.characters[i].name.trim()){ toast(`⚠ Personagem ${i+1} precisa de um nome.`); return; }
+    if(!STATE.characters[i].name.trim()){ toast(`⚠ Personagem ${i+1} precisa de nome.`); return; }
   }
-
-  STATE.adventure.title   = title;
-  STATE.adventure.premise = document.getElementById('adv-premise').value.trim();
-  STATE.adventure.tone    = document.getElementById('adv-tone').value;
-  STATE.adventure.hooks   = document.getElementById('adv-hooks').value.trim();
-  STATE.history = [];
-  STATE.round = 0;
-
-  buildSessionUI();
-  showScreen('session');
+  STATE.adventure.title=title;
+  STATE.adventure.premise=document.getElementById('adv-premise').value.trim();
+  STATE.adventure.tone=document.getElementById('adv-tone').value;
+  STATE.adventure.hooks=document.getElementById('adv-hooks').value.trim();
+  STATE.history=[]; STATE.round=0;
+  buildSessionUI(); showScreen('session');
 }
 
-/* ─── BUILD SESSION UI ─── */
+/* ─── SESSION ─── */
 function buildSessionUI(){
-  document.getElementById('session-adv-title').textContent = STATE.adventure.title;
-  document.getElementById('session-adv-meta').textContent =
-    `${STATE.adventure.tone} · ${STATE.characters.length} personagem${STATE.characters.length>1?'s':''}`;
-  document.getElementById('players-count').textContent = STATE.characters.length;
-  renderPlayersPanel();
-  renderOrientadorPanel(null);
-  document.getElementById('arbitro-panel').textContent = 'Aguardando ações dos jogadores…';
-  document.getElementById('history-scroll').innerHTML = `<div class="empty-state" style="margin:auto">✦ &nbsp;Escreva a primeira narração e clique em Jogar.</div>`;
+  document.getElementById('session-adv-title').textContent=STATE.adventure.title;
+  document.getElementById('session-adv-meta').textContent=`${STATE.adventure.tone} · ${STATE.characters.length} personagem${STATE.characters.length>1?'s':''}`;
+  document.getElementById('players-count').textContent=STATE.characters.length;
+  renderPlayersPanel(); renderOrientadorPanel(null);
+  document.getElementById('arbitro-panel').textContent='Aguardando ações…';
+  document.getElementById('history-scroll').innerHTML=`<div class="empty-state" style="margin:auto">✦ &nbsp;Escreva a primeira narração e clique em Jogar.</div>`;
   updateRoundCounter();
 }
 
 function renderPlayersPanel(responses){
-  const panel = document.getElementById('players-panel');
-  panel.innerHTML = STATE.characters.map((ch,i)=>{
-    const classKey = CLASS_KEYS[ch.class] || 'fighter';
-    const emoji = CLASS_EMOJIS[classKey] || '⚔️';
-    const resp = responses ? (responses[i] || '…') : null;
-    return `
-      <div class="player-block">
-        <div class="player-block-head">
-          <div class="player-avatar class-${classKey}">${emoji}</div>
-          <div class="player-block-meta">
-            <div class="player-name">${esc(ch.name)}</div>
-            <div class="player-class">${ch.race} · ${ch.class}</div>
-          </div>
-        </div>
-        <div class="player-block-body ${resp===null?'loading':''}">
-          ${resp===null ? 'Aguardando…' : formatText(resp)}
-        </div>
-      </div>
-    `;
+  const panel=document.getElementById('players-panel');
+  panel.innerHTML=STATE.characters.map((ch,i)=>{
+    const ck=CLASS_KEYS[ch.class]||'fighter';
+    const em=CLASS_EMOJIS[ck]||'⚔️';
+    const resp=responses?(responses[i]||'…'):null;
+    return `<div class="player-block"><div class="player-block-head"><div class="player-avatar class-${ck}">${em}</div><div class="player-block-meta"><div class="player-name">${esc(ch.name)}</div><div class="player-class">${ch.race} · ${ch.class}</div></div></div><div class="player-block-body ${resp===null?'loading':''}">${resp===null?'Aguardando…':formatText(resp)}</div></div>`;
   }).join('');
 }
 
 function renderOrientadorPanel(feedback){
-  const panel = document.getElementById('orientador-panel');
-  if(!feedback){
-    panel.innerHTML = '<div class="empty-state">Aguardando narração do mestre…</div>';
-    return;
-  }
-  const sections = parseOrientadorFeedback(feedback);
-  panel.innerHTML = sections.map((s,i)=>`
-    <details class="feedback-section" ${i===0?'open':''}>
-      <summary>${s.title}</summary>
-      <div class="feedback-body">${formatText(s.body)}</div>
-    </details>
-  `).join('') || `<div class="feedback-body">${formatText(feedback)}</div>`;
+  const panel=document.getElementById('orientador-panel');
+  if(!feedback){ panel.innerHTML='<div class="empty-state">Aguardando narração…</div>'; return; }
+  const sections=parseOrientadorFeedback(feedback);
+  panel.innerHTML=sections.map((s,i)=>`<details class="feedback-section" ${i===0?'open':''}><summary>${s.title}</summary><div class="feedback-body">${formatText(s.body)}</div></details>`).join('')||`<div class="feedback-body">${formatText(feedback)}</div>`;
 }
 
 function parseOrientadorFeedback(text){
-  // Try to parse numbered list or headers
-  const lines = text.split('\n').filter(l=>l.trim());
-  const sections = [];
-  let current = null;
+  const lines=text.split('\n').filter(l=>l.trim());
+  const sections=[];let current=null;
   for(const line of lines){
-    const m = line.match(/^(\d[\.\)]|#+|\*{1,2}|─+)\s*(.+)$/);
-    if(m && m[2].length < 60){
-      if(current) sections.push(current);
-      current = { title: m[2].replace(/\*+/g,'').trim(), body:'' };
-    } else {
-      if(current) current.body += line+'\n';
-      else if(sections.length===0){ sections.push({title:'Análise', body:line+'\n'}); current=null; }
-      else sections[sections.length-1].body += line+'\n';
-    }
+    const m=line.match(/^(\d[\.\)]|#+|\*{1,2}|─+)\s*(.+)$/);
+    if(m&&m[2].length<60){ if(current)sections.push(current); current={title:m[2].replace(/\*+/g,'').trim(),body:''}; }
+    else{ if(current)current.body+=line+'\n'; else if(!sections.length){sections.push({title:'Análise',body:line+'\n'});current=null;}else sections[sections.length-1].body+=line+'\n'; }
   }
-  if(current) sections.push(current);
+  if(current)sections.push(current);
   return sections.slice(0,6);
 }
 
 function formatText(t){
-  return (t||'')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/\n/g,'<br>');
+  return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>');
 }
 
-/* ─── PLAY ROUND ─── */
 async function playRound(){
-  const narration = document.getElementById('narration-input').value.trim();
-  if(!narration){ toast('⚠ Escreva uma narração antes de jogar.'); return; }
-  if(STATE.loading){ toast('⏳ Aguarde a rodada anterior terminar.'); return; }
-
-  STATE.loading = true;
-  STATE.round++;
-  updateRoundCounter();
-  setStatus('loading');
-  document.getElementById('play-btn').disabled = true;
-  document.getElementById('narration-status').textContent = 'Consultando agentes…';
-
-  // Add narration to history
-  const entry = {
-    type:'round', narration,
-    playersRaw:'', orientadorRaw:'', arbitroRaw:'',
-    ts: new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})
-  };
+  const narration=document.getElementById('narration-input').value.trim();
+  if(!narration){ toast('⚠ Escreva uma narração.'); return; }
+  if(STATE.loading){ toast('⏳ Aguarde a rodada anterior.'); return; }
+  STATE.loading=true; STATE.round++;
+  updateRoundCounter(); setStatus('loading');
+  document.getElementById('play-btn').disabled=true;
+  document.getElementById('narration-status').textContent='Consultando agentes…';
+  const entry={type:'round',narration,playersRaw:'',orientadorRaw:'',arbitroRaw:'',ts:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})};
   STATE.history.push(entry);
-
-  // Show loading state in panels
   renderPlayersPanel(null);
-  document.getElementById('orientador-panel').innerHTML = '<div class="empty-state" style="color:var(--gold);font-style:italic">Analisando narração…</div>';
-  document.getElementById('arbitro-panel').textContent = 'Processando ações…';
-  addToHistory(entry, true);
-
-  // Build context
-  const historyCtx = buildHistoryContext();
-  const charBlock   = buildCharBlock();
-  const adventureCtx = buildAdventureCtx();
-
-  try {
-    const [playersRes, orientadorRes, arbitroRes] = await Promise.all([
-      callGemini(buildPlayersPrompt(adventureCtx, charBlock, historyCtx, narration)),
-      callGemini(buildOrientadorPrompt(adventureCtx, charBlock, historyCtx, narration)),
-      callGemini(buildArbitroPrompt(adventureCtx, charBlock, historyCtx, narration)),
+  document.getElementById('orientador-panel').innerHTML='<div class="empty-state" style="color:var(--gold);font-style:italic">Analisando narração…</div>';
+  document.getElementById('arbitro-panel').textContent='Processando ações…';
+  addToHistory(entry,true);
+  const histCtx=buildHistoryContext(),charBlock=buildCharBlock(),advCtx=buildAdventureCtx();
+  try{
+    const [pr,or,ar]=await Promise.all([
+      callGemini(buildPlayersPrompt(advCtx,charBlock,histCtx,narration)),
+      callGemini(buildOrientadorPrompt(advCtx,charBlock,histCtx,narration)),
+      callGemini(buildArbitroPrompt(advCtx,charBlock,histCtx,narration)),
     ]);
-
-    entry.playersRaw    = playersRes;
-    entry.orientadorRaw = orientadorRes;
-    entry.arbitroRaw    = arbitroRes;
-
-    renderPlayersPanel(parsePlayersResponse(playersRes, STATE.characters));
-    renderOrientadorPanel(orientadorRes);
-    document.getElementById('arbitro-panel').textContent = arbitroRes;
-
-    updateHistoryEntry(STATE.history.length-1, entry);
-    saveToLocalStorage();
-    setStatus('done');
-    document.getElementById('narration-status').textContent = '✓ Rodada completa';
-
-  } catch(err){
-    console.error(err);
-    toast('⚠ Erro na API: '+err.message);
-    setStatus('idle');
-    document.getElementById('narration-status').textContent = '⚠ Erro — tente novamente';
+    entry.playersRaw=pr; entry.orientadorRaw=or; entry.arbitroRaw=ar;
+    renderPlayersPanel(parsePlayersResponse(pr,STATE.characters));
+    renderOrientadorPanel(or);
+    document.getElementById('arbitro-panel').textContent=ar;
+    updateHistoryEntry(STATE.history.length-1,entry);
+    saveToLocalStorage(); setStatus('done');
+    document.getElementById('narration-status').textContent='✓ Rodada completa';
+  }catch(err){
+    console.error(err); toast('⚠ Erro na API: '+err.message); setStatus('idle');
+    document.getElementById('narration-status').textContent='⚠ Erro — tente novamente';
   }
-
-  STATE.loading = false;
-  document.getElementById('play-btn').disabled = false;
-  clearNarration();
+  STATE.loading=false; document.getElementById('play-btn').disabled=false; clearNarration();
 }
 
-/* ─── PARSE PLAYERS ─── */
-function parsePlayersResponse(text, chars){
-  // Split by character name or numbered section
-  const results = [];
-  let remaining = text;
+function parsePlayersResponse(text,chars){
+  const results=[];
   for(const ch of chars){
-    // Try to find section starting with character name
-    const escapedName = ch.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-    const regex = new RegExp(`(?:^|\\n)(?:\\*{0,2}${escapedName}\\*{0,2}|\\d+\\.?\\s*${escapedName})[:\\-—\\*]*\\s*(.+?)(?=\\n(?:\\*{0,2}\\w+\\*{0,2}|\\d+\\.?)\\s|$)`, 'is');
-    const m = remaining.match(regex);
+    const en=ch.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const regex=new RegExp(`(?:^|\\n)(?:\\*{0,2}${en}\\*{0,2}|\\d+\\.?\\s*${en})[:\\-—\\*]*\\s*(.+?)(?=\\n(?:\\*{0,2}\\w+\\*{0,2}|\\d+\\.?)\\s|$)`,'is');
+    const m=text.match(regex);
     if(m) results.push(m[1].trim());
-    else {
-      // Fallback: split by paragraph
-      const chunks = remaining.split(/\n{2,}/);
-      results.push(chunks[results.length]||remaining.split('\n')[results.length]||'…');
-    }
+    else { const chunks=text.split(/\n{2,}/); results.push(chunks[results.length]||text.split('\n')[results.length]||'…'); }
   }
-  // If all same or none found, split evenly
-  if(results.every(r=>!r||r==='…')){
-    const chunks = text.split(/\n{2,}/);
-    return chars.map((_,i)=>chunks[i]||text);
-  }
+  if(results.every(r=>!r||r==='…')){ const chunks=text.split(/\n{2,}/); return chars.map((_,i)=>chunks[i]||text); }
   return results;
 }
 
-/* ─── CONTEXT BUILDERS ─── */
-function buildAdventureCtx(){
-  const a = STATE.adventure;
-  return `AVENTURA: "${a.title}"
-Tom: ${a.tone}
-Premissa: ${a.premise}
-Ganchos: ${a.hooks||'Não especificados'}`;
+function buildAdventureCtx(){ const a=STATE.adventure; return `AVENTURA: "${a.title}"\nTom: ${a.tone}\nPremissa: ${a.premise}\nGanchos: ${a.hooks||'Não especificados'}`; }
+function buildCharBlock(){ return STATE.characters.map((ch,i)=>`Personagem ${i+1}: ${ch.name} (${ch.race} ${ch.class})\n  Background: ${ch.background||'—'}\n  Motivação: ${ch.motivation||'—'}\n  Personalidade: ${ch.personality||'—'}`).join('\n'); }
+function buildHistoryContext(){ return STATE.history.slice(-6).map(h=>h.type==='round'?`[Rodada] MESTRE: ${h.narration}${h.playersRaw?`\nJOGADORES: ${h.playersRaw.substring(0,400)}…`:''}`:'' ).filter(Boolean).join('\n\n'); }
+
+function buildPlayersPrompt(adv,chars,history,narration){
+  return `Você é um grupo de jogadores de D&D 5e jogando uma aventura. Interprete CADA personagem separadamente com sua personalidade, motivações e limitações de classe. Para cada personagem, descreva em 2-3 linhas o que ele pensa, o que diz e o que tenta fazer. Seja autêntico ao background. Use primeira pessoa para falas diretas. Separe claramente cada personagem pelo nome como título.\n\n${adv}\n\nPERSONAGENS:\n${chars}\n\nHISTÓRICO:\n${history||'(início da sessão)'}\n\nNARRAÇÃO:\n${narration}\n\nResponda como cada personagem:`;
+}
+function buildOrientadorPrompt(adv,chars,history,narration){
+  return `Você é um mestre de D&D 5e experiente e coach de narração. Analise a narração abaixo com base nos princípios do guia "A Arte de Narrar" e do "Treino de Narração". Dê feedback construtivo organizado em até 5 pontos com título em negrito, cobrindo: (1) Uso dos cinco sentidos e imersão sensorial, (2) Técnica Mostrar-Não-Contar, (3) Ritmo, tensão e curva dramática, (4) Vozes e NPCs, (5) Sugestão prática para a próxima cena. Cite trechos específicos. Seja direto e construtivo. Escreva em português.\n\n${adv}\n\nPERSONAGENS:\n${chars}\n\nHISTÓRICO:\n${history||'(início)'}\n\nNARRAÇÃO A ANALISAR:\n${narration}`;
+}
+function buildArbitroPrompt(adv,chars,history,narration){
+  return `Você é o árbitro de regras D&D 5e. Com base na narração do mestre e nas prováveis reações dos jogadores, determine: quais testes são necessários (atributo, habilidade, CD), se há combate (iniciativa, ataques), dano, condições e efeitos. Seja preciso com as regras da 5ª edição. Formate como lista com marcadores. Se não há testes relevantes, explique brevemente por quê. Escreva em português.\n\n${adv}\n\nPERSONAGENS:\n${chars}\n\nHISTÓRICO:\n${history||'(início)'}\n\nNARRAÇÃO:\n${narration}`;
 }
 
-function buildCharBlock(){
-  return STATE.characters.map((ch,i)=>`
-Personagem ${i+1}: ${ch.name} (${ch.race} ${ch.class})
-  Background: ${ch.background||'Não informado'}
-  Motivação: ${ch.motivation||'Não informada'}
-  Personalidade: ${ch.personality||'Não informada'}`).join('\n');
+/* ─── TRAINING ─── */
+function buildTrainingNav(){
+  const nav=document.getElementById('training-nav');
+  const total=TRAINING_MODULES.reduce((s,m)=>s+m.exercises.length,0);
+  const done=Object.keys(STATE.training.completed).length;
+  nav.innerHTML=`<div class="training-nav-section">Módulos (${done}/${total} exercícios)</div>`
+    +TRAINING_MODULES.map(m=>{
+      const mDone=m.exercises.filter(e=>STATE.training.completed[e.id]).length;
+      const isDone=mDone===m.exercises.length;
+      return `<div class="training-nav-item${currentTrainingModule===m.id?' active':''}${isDone?' done':''}" onclick="loadTrainingModule('${m.id}')">
+        <span class="nav-icon">${m.icon}</span>
+        <span>${m.name}</span>
+        <span class="nav-badge">${mDone}/${m.exercises.length}</span>
+      </div>`;
+    }).join('');
 }
 
-function buildHistoryContext(){
-  const last5 = STATE.history.slice(-6);
-  return last5.map(h=>{
-    if(h.type==='round'){
-      let s = `[Rodada] MESTRE: ${h.narration}`;
-      if(h.playersRaw) s += `\nJOGADORES: ${h.playersRaw.substring(0,400)}…`;
-      return s;
+function loadTrainingModule(id){
+  currentTrainingModule=id;
+  const m=TRAINING_MODULES.find(x=>x.id===id);
+  if(!m) return;
+  document.getElementById('training-topbar-title').textContent=`${m.icon} ${m.name}`;
+  const done=m.exercises.filter(e=>STATE.training.completed[e.id]).length;
+  document.getElementById('training-progress-label').textContent=`${done}/${m.exercises.length} exercícios`;
+  const body=document.getElementById('training-body');
+  const pct=done/m.exercises.length*100;
+  body.innerHTML=`
+    <div class="module-hero">
+      <span class="module-hero-icon">${m.icon}</span>
+      <div class="module-hero-title">${m.name}</div>
+      <div class="module-hero-sub">${m.subtitle}</div>
+      <div class="progress-bar-outer" style="width:200px;margin:14px auto 0">
+        <div class="progress-bar-inner" style="width:${pct}%"></div>
+      </div>
+    </div>
+    <div class="exercise-intro">${m.intro.replace(/\n/g,'<br>')}</div>
+    ${m.examples.map(e=>`
+      <div style="margin-bottom:20px">
+        <div class="section-title" style="font-size:.65rem;margin-bottom:12px">✦ ANTES E DEPOIS: ${e.label}</div>
+        <div class="ex-before-after">
+          <div class="ex-box bad"><div class="ex-box-label">❌ Fraco</div>${esc(e.bad)}</div>
+          <div class="ex-box good"><div class="ex-box-label">✅ Melhorado</div>${esc(e.good)}</div>
+        </div>
+        <div class="ex-note">📝 ${e.note}</div>
+      </div>`).join('')}
+    ${m.exercises.map(ex=>`
+      <div class="exercise-card" id="excard-${ex.id}">
+        <div class="exercise-card-head">
+          <span class="exercise-card-number">Exercício ${ex.id}</span>
+          <span class="exercise-card-title">${ex.title}</span>
+          <span class="exercise-card-status ${STATE.training.completed[ex.id]?'done-status':''}" id="exstatus-${ex.id}">
+            ${STATE.training.completed[ex.id]?'✓ Concluído':'—'}
+          </span>
+        </div>
+        <div class="exercise-card-body">
+          <div class="exercise-prompt">
+            ${ex.prompt}
+            ${ex.items?`<ul>${ex.items.map(it=>`<li>${esc(it)}</li>`).join('')}</ul>`:''}
+          </div>
+          <textarea class="write-area" id="exta-${ex.id}" placeholder="${esc(ex.placeholder||'')}">${exerciseResponses[ex.id]||''}</textarea>
+          <div class="write-actions">
+            <span class="write-hint">Escreva sua resposta acima, depois envie para o agente avaliar</span>
+            <button class="btn btn-arc btn-sm" onclick="submitExercise('${m.id}','${ex.id}')">
+              🔮 Enviar para Avaliação
+            </button>
+          </div>
+          <div class="ai-feedback" id="exfeedback-${ex.id}">
+            <div class="ai-feedback-header">
+              <span class="ai-feedback-badge">🔮 Avaliação do Agente</span>
+              <span class="ai-feedback-score" id="exscore-${ex.id}"></span>
+            </div>
+            <div id="exscorebar-${ex.id}"></div>
+            <div class="ai-feedback-body" id="exfeedbackbody-${ex.id}"></div>
+          </div>
+        </div>
+      </div>`).join('')}
+    <div class="challenge-box">
+      <div class="challenge-box-title">${m.challenge.title}</div>
+      <div class="challenge-box-body">${m.challenge.body}</div>
+    </div>
+  `;
+  buildTrainingNav();
+}
+
+async function submitExercise(moduleId, exId){
+  const textarea=document.getElementById(`exta-${exId}`);
+  const text=textarea.value.trim();
+  if(!text){ toast('⚠ Escreva sua resposta antes de enviar.'); return; }
+  exerciseResponses[exId]=text;
+  const m=TRAINING_MODULES.find(x=>x.id===moduleId);
+  const ex=m.exercises.find(x=>x.id===exId);
+  const btn=document.querySelector(`#excard-${exId} .btn-arc`);
+  const feedbackEl=document.getElementById(`exfeedback-${exId}`);
+  btn.disabled=true;
+  btn.innerHTML=`<div class="loading-spinner"></div> Avaliando…`;
+  feedbackEl.classList.remove('visible');
+  const prompt=buildTrainingFeedbackPrompt(m,ex,text);
+  try{
+    const resp=await callGemini(prompt);
+    const {score,feedback}=parseTrainingFeedback(resp);
+    document.getElementById(`exfeedbackbody-${exId}`).innerHTML=formatText(feedback);
+    const scoreEl=document.getElementById(`exscore-${exId}`);
+    const scoreBarEl=document.getElementById(`exscorebar-${exId}`);
+    if(score>0){
+      scoreEl.textContent=`${score}/10`;
+      scoreBarEl.innerHTML=`<div class="score-bar"><div class="score-fill" style="width:${score*10}%"></div></div><div class="score-labels"><span>0</span><span>Técnica</span><span>10</span></div>`;
     }
-    return '';
-  }).filter(Boolean).join('\n\n');
+    feedbackEl.classList.add('visible');
+    if(score>=6||!score){
+      STATE.training.completed[exId]=true;
+      document.getElementById(`exstatus-${exId}`).textContent='✓ Concluído';
+      document.getElementById(`exstatus-${exId}`).classList.add('done-status');
+      localStorage.setItem('mdm_training',JSON.stringify(STATE.training));
+      buildTrainingNav();
+      const doneCount=m.exercises.filter(e=>STATE.training.completed[e.id]).length;
+      document.getElementById('training-progress-label').textContent=`${doneCount}/${m.exercises.length} exercícios`;
+    }
+  }catch(err){
+    console.error(err);
+    document.getElementById(`exfeedbackbody-${exId}`).innerHTML=`<span style="color:var(--blood3)">⚠ Erro ao avaliar: ${err.message}</span>`;
+    feedbackEl.classList.add('visible');
+  }
+  btn.disabled=false; btn.innerHTML='🔮 Enviar para Avaliação';
 }
 
-function buildPlayersPrompt(adv, chars, history, narration){
-  return `Você é um grupo de jogadores de D&D 5e jogando uma aventura. Interprete CADA personagem separadamente com sua personalidade, motivações e limitações de classe. Para cada personagem, descreva em 2-3 linhas o que ele pensa, o que diz e o que tenta fazer. Seja autêntico ao background de cada um. Use primeira pessoa para falas diretas. Separe claramente a resposta de cada personagem pelo nome dele como título.
+function buildTrainingFeedbackPrompt(m,ex,response){
+  return `Você é um coach especialista em narração de RPG, com profundo conhecimento de D&D 5e e das técnicas descritas no guia "A Arte de Narrar" e no caderno "Treino de Narração". Você está avaliando a resposta de um mestre a um exercício de treinamento.
 
-${adv}
+MÓDULO: ${m.name} — ${m.subtitle}
 
-PERSONAGENS:
-${chars}
+EXERCÍCIO: ${ex.title}
+ENUNCIADO: ${ex.prompt}
 
-HISTÓRICO RECENTE:
-${history||'(início da sessão)'}
+RESPOSTA DO MESTRE:
+${response}
 
-NARRAÇÃO ATUAL DO MESTRE:
-${narration}
+Avalie a resposta com base nas seguintes técnicas do guia:
+- Uso dos cinco sentidos (não apenas visão)
+- Técnica Mostrar-Não-Contar (ações e detalhes observáveis vs. adjetivos diretos)
+- Especificidade vs. genericidade (palavras concretas vs. vagas)
+- Consistência de voz e personalidade (para exercícios de NPC)
+- Progressão e ritmo (para exercícios de tensão)
 
-Responda como cada personagem:`;
+Sua resposta deve conter:
+1. Uma nota de 1 a 10 na primeira linha, no formato exato: NOTA: X/10
+2. Um parágrafo de elogio genuíno sobre o que funcionou bem (seja específico, cite trechos)
+3. Dois ou três pontos de melhoria concretos e acionáveis (com exemplos de reescrita quando possível)
+4. Uma frase de encorajamento final
+
+Seja construtivo, específico e didático. Escreva em português. Máximo de 300 palavras.`;
 }
 
-function buildOrientadorPrompt(adv, chars, history, narration){
-  return `Você é um mestre de D&D 5e experiente analisando a narração de outro mestre. Dê feedback construtivo e direto. Organize em até 5 pontos curtos com título em negrito cada um, cobrindo: (1) Clareza e imersão da cena, (2) Ritmo e tensão, (3) Uso de mecânicas D&D e affordances táticas, (4) Aproveitamento dos ganchos e personagens, (5) Sugestão principal para a próxima cena. Seja específico, cite trechos da narração. Escreva em português.
-
-${adv}
-
-PERSONAGENS:
-${chars}
-
-HISTÓRICO:
-${history||'(início da sessão)'}
-
-NARRAÇÃO A ANALISAR:
-${narration}`;
-}
-
-function buildArbitroPrompt(adv, chars, history, narration){
-  return `Você é o árbitro de regras D&D 5e. Com base na narração do mestre e nas possíveis reações dos jogadores, determine: quais testes são necessários (atributo, habilidade, CD sugerida), se há combate (iniciativa, possíveis ataques), dano, condições e efeitos relevantes. Seja preciso com as regras da 5ª edição. Formate como lista clara com marcadores. Se não há testes relevantes, explique por quê. Escreva em português.
-
-${adv}
-
-PERSONAGENS:
-${chars}
-
-HISTÓRICO:
-${history||'(início da sessão)'}
-
-NARRAÇÃO:
-${narration}`;
+function parseTrainingFeedback(text){
+  const scoreMatch=text.match(/NOTA:\s*(\d+)\s*\/\s*10/i);
+  const score=scoreMatch?parseInt(scoreMatch[1]):0;
+  const feedback=text.replace(/NOTA:\s*\d+\s*\/\s*10/i,'').trim();
+  return {score,feedback};
 }
 
 /* ─── API CALL ─── */
 async function callGemini(prompt){
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${STATE.apiKey}`;
-  const body = {
-    contents:[{ role:'user', parts:[{ text: prompt }] }],
-    generationConfig:{ maxOutputTokens:1500, temperature:0.85, topP:0.95 }
-  };
-  const res = await fetch(url,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(body)
-  });
-  if(!res.ok){
-    const err = await res.json().catch(()=>({}));
-    throw new Error(err.error?.message || `HTTP ${res.status}`);
-  }
-  const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || '(sem resposta)';
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${STATE.apiKey}`;
+  const body={contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:1500,temperature:0.85,topP:0.95}};
+  const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!res.ok){ const err=await res.json().catch(()=>({})); throw new Error(err.error?.message||`HTTP ${res.status}`); }
+  const data=await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text||'(sem resposta)';
 }
 
 /* ─── HISTORY ─── */
-function addToHistory(entry, loading=false){
-  const scroll = document.getElementById('history-scroll');
-  // Remove empty state
-  const empty = scroll.querySelector('.empty-state');
-  if(empty) empty.remove();
-
-  const el = document.createElement('div');
-  el.className = 'history-entry';
-  el.id = `he-${STATE.history.length-1}`;
-
-  el.innerHTML = `
-    <div class="history-entry-header">
-      <span class="history-tag tag-round">Rodada ${STATE.round}</span>
-      <span class="history-timestamp">${entry.ts}</span>
-    </div>
-    <div class="history-narration">${formatText(entry.narration)}</div>
-    ${loading ? `<div class="history-round-summary" id="hsum-${STATE.history.length-1}" style="margin-top:8px;color:var(--text3);font-style:italic">Agentes processando…</div>` : ''}
-  `;
-
-  scroll.appendChild(el);
-  scroll.scrollTop = scroll.scrollHeight;
+function addToHistory(entry,loading=false){
+  const scroll=document.getElementById('history-scroll');
+  const empty=scroll.querySelector('.empty-state'); if(empty)empty.remove();
+  const el=document.createElement('div'); el.className='history-entry'; el.id=`he-${STATE.history.length-1}`;
+  el.innerHTML=`<div class="history-entry-header"><span class="history-tag tag-round">Rodada ${STATE.round}</span><span class="history-timestamp">${entry.ts}</span></div><div class="history-narration">${formatText(entry.narration)}</div>${loading?`<div class="history-round-summary" id="hsum-${STATE.history.length-1}" style="color:var(--text3);font-style:italic">Agentes processando…</div>`:''}`;
+  scroll.appendChild(el); scroll.scrollTop=scroll.scrollHeight;
 }
-
-function updateHistoryEntry(idx, entry){
-  const el = document.getElementById(`hsum-${idx}`);
-  if(el){
-    // Create a brief summary
-    const firstPlayer = entry.playersRaw.split('\n').slice(0,2).join(' ').substring(0,120);
-    el.style.color = '';
-    el.style.fontStyle = '';
-    el.innerHTML = `<em>Jogadores responderam</em> · Orientador e árbitro consultados.`;
-  }
+function updateHistoryEntry(idx,entry){
+  const el=document.getElementById(`hsum-${idx}`);
+  if(el){ el.style.color=''; el.style.fontStyle=''; el.innerHTML=`<em>Jogadores responderam</em> · Orientador e árbitro consultados.`; }
 }
-
-function updateRoundCounter(){
-  document.getElementById('round-counter').textContent = `Rodada ${STATE.round}`;
-}
-
-/* ─── STATUS DOTS ─── */
-function setStatus(state){
-  ['players','orientador','arbitro'].forEach(id=>{
-    const d = document.getElementById(`dot-${id}`);
-    if(d){ d.className = 'status-dot'+(state!=='idle'?' '+state:''); }
-  });
-}
-
-/* ─── NARRATION ─── */
-function handleNarrationKey(e){
-  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); playRound(); }
-}
+function updateRoundCounter(){ document.getElementById('round-counter').textContent=`Rodada ${STATE.round}`; }
+function setStatus(state){ ['players','orientador','arbitro'].forEach(id=>{ const d=document.getElementById(`dot-${id}`); if(d) d.className='status-dot'+(state!=='idle'?' '+state:''); }); }
+function handleNarrationKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); playRound(); } }
 function clearNarration(){ document.getElementById('narration-input').value=''; }
 
-/* ─── SAVE / LOAD ─── */
+/* ─── SAVE / LOAD / EXPORT ─── */
 function saveSetup(){
-  const data = {
-    adventure:{
-      title:document.getElementById('adv-title').value,
-      premise:document.getElementById('adv-premise').value,
-      tone:document.getElementById('adv-tone').value,
-      hooks:document.getElementById('adv-hooks').value,
-    },
-    characters:STATE.characters,
-    savedAt:new Date().toISOString(),
-  };
-  downloadJSON(data, `mdm_setup_${Date.now()}.json`);
-  toast('💾 Setup salvo!');
+  const data={adventure:{title:document.getElementById('adv-title').value,premise:document.getElementById('adv-premise').value,tone:document.getElementById('adv-tone').value,hooks:document.getElementById('adv-hooks').value},characters:STATE.characters,savedAt:new Date().toISOString()};
+  downloadJSON(data,`mdm_setup_${Date.now()}.json`); toast('💾 Setup salvo!');
 }
-
-function loadSetup(){
-  document.getElementById('load-file-input').click();
-}
-
 function handleFileLoad(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      const data = JSON.parse(ev.target.result);
-      if(data.adventure){
-        document.getElementById('adv-title').value   = data.adventure.title||'';
-        document.getElementById('adv-premise').value = data.adventure.premise||'';
-        document.getElementById('adv-tone').value    = data.adventure.tone||'épico heroico';
-        document.getElementById('adv-hooks').value   = data.adventure.hooks||'';
-      }
-      if(data.characters) STATE.characters = data.characters;
-      if(data.history){ STATE.history = data.history; STATE.round = data.round||0; }
-      renderChars();
-      updateAddBtn();
-      toast('📂 Dados carregados!');
-    } catch(err){ toast('⚠ Arquivo inválido.'); }
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(data.adventure){ document.getElementById('adv-title').value=data.adventure.title||''; document.getElementById('adv-premise').value=data.adventure.premise||''; document.getElementById('adv-tone').value=data.adventure.tone||'épico heroico'; document.getElementById('adv-hooks').value=data.adventure.hooks||''; }
+      if(data.characters) STATE.characters=data.characters;
+      if(data.history){ STATE.history=data.history; STATE.round=data.round||0; }
+      renderChars(); updateAddBtn(); toast('📂 Dados carregados!');
+    }catch(err){ toast('⚠ Arquivo inválido.'); }
   };
-  reader.readAsText(file);
-  e.target.value='';
+  reader.readAsText(file); e.target.value='';
 }
-
 function exportSession(){
-  const data = {
-    adventure:STATE.adventure,
-    characters:STATE.characters,
-    history:STATE.history,
-    round:STATE.round,
-    exportedAt:new Date().toISOString(),
-  };
-  downloadJSON(data, `mdm_sessao_${STATE.adventure.title.replace(/\s+/g,'_')}_${Date.now()}.json`);
-  toast('💾 Sessão exportada!');
+  const data={adventure:STATE.adventure,characters:STATE.characters,history:STATE.history,round:STATE.round,exportedAt:new Date().toISOString()};
+  downloadJSON(data,`mdm_sessao_${(STATE.adventure.title||'sessao').replace(/\s+/g,'_')}_${Date.now()}.json`); toast('💾 Sessão exportada!');
 }
-
-function downloadJSON(data, filename){
-  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
+function downloadJSON(data,filename){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click();
 }
-
 function saveToLocalStorage(){
-  try {
-    localStorage.setItem('mdm_session', JSON.stringify({
-      adventure:STATE.adventure,
-      characters:STATE.characters,
-      history:STATE.history.slice(-20),
-      round:STATE.round,
-    }));
-  } catch(e){ /* quota */ }
+  try{ localStorage.setItem('mdm_session',JSON.stringify({adventure:STATE.adventure,characters:STATE.characters,history:STATE.history.slice(-20),round:STATE.round})); }catch(e){}
 }
 
 /* ─── TOAST ─── */
-function toast(msg, dur=2800){
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t = setTimeout(()=>el.classList.remove('show'), dur);
+function toast(msg,dur=2800){
+  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),dur);
 }
-
-// Allow Enter key in API screen
-document.addEventListener('keydown', e=>{
-  if(e.key==='Enter' && document.getElementById('screen-api').classList.contains('active')){
-    handleApiKey();
-  }
-});
 </script>
 </body>
 </html>
