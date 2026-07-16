@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #0f0f1a;
+  --color-surface: #1e1e2e;
+  --color-surface-raised: #252535;
+  --color-border: #2a2a3a;
+  --color-primary: #8b0000;
+  --color-primary-hover: #a01010;
+  --color-accent: #b8860b;
+  --color-text: #e8e8e8;
+  --color-text-secondary: #a0a0b0;
+  --color-text-muted: #606070;
+  --color-success: #2d5a27;
+  --color-warning: #7a4f00;
+  --color-danger: #5a1a1a;
+  --color-info: #1a3a5a;
+
+  /* Status de revelação */
+  --color-unknown: #2a2a2a;
+  --color-spotted: #1a2a3a;
+  --color-known: #1e1e2e;
+  --color-investigated: #1a2a1a;
+
+  /* Tipos de NPC */
+  --color-ally: #1a3a1a;
+  --color-neutral: #2a2a2a;
+  --color-antagonist: #3a2a1a;
+  --color-villain: #3a1a1a;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-bg text-text font-body antialiased;
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-title;
+  }
+
+  /* Scrollbar temática */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+  }
+}
+
+@layer components {
+  /* Card padrão */
+  .card {
+    @apply rounded-lg border border-border bg-surface p-4;
+  }
+
+  .card-raised {
+    @apply rounded-lg border border-border bg-surface-raised p-4;
+  }
+
+  /* Campo privado (só Mestre) */
+  .field-private {
+    @apply border-l-2 border-primary bg-[#2a1a1a] pl-3;
+  }
+
+  /* Badge de condição */
+  .condition-badge {
+    @apply rounded-full px-2 py-1 font-mono text-xs;
+  }
+
+  /* Inputs */
+  .input {
+    @apply w-full rounded-md border border-border bg-bg px-3 py-2 text-text
+      placeholder:text-text-muted focus:border-accent focus:outline-none
+      focus:ring-1 focus:ring-accent;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-text-secondary;
+  }
+}
