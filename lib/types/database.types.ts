@@ -42,6 +42,8 @@ export type ItemStatus = "active" | "sold" | "destroyed" | "given" | "lost";
 export interface QuestObjective {
   text: string;
   completed: boolean;
+  // Index signature torna o tipo compatível com a coluna Json (jsonb).
+  [key: string]: Json | undefined;
 }
 
 export interface Database {

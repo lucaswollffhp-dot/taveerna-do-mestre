@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/shared/Header";
 
-export default async function MasterLayout({
+export default async function PlayerLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -23,7 +23,8 @@ export default async function MasterLayout({
     <div className="flex min-h-screen flex-col">
       <Header
         userLabel={userLabel}
-        altArea={{ href: "/play", label: "Modo Jogador" }}
+        homeHref="/play"
+        altArea={{ href: "/dashboard", label: "Modo Mestre" }}
       />
       {children}
     </div>

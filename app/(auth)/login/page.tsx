@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
-import { login, type AuthState } from "../actions";
+import { login, loginWithGoogle, type AuthState } from "../actions";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 
@@ -60,6 +60,18 @@ export default function LoginPage() {
         )}
 
         <SubmitButton />
+      </form>
+
+      <div className="my-6 flex items-center gap-3">
+        <div className="flex-1 border-t border-border" />
+        <span className="text-xs text-text-muted">OU</span>
+        <div className="flex-1 border-t border-border" />
+      </div>
+
+      <form action={loginWithGoogle}>
+        <Button type="submit" fullWidth variant="ghost">
+          🔐 Entrar com Google
+        </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-text-secondary">
