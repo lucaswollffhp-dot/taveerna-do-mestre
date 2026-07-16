@@ -26,9 +26,20 @@ campanha de referência **"Os Três Selos do Abismo"** (D&D 5e, Forgotten Realms
 - [x] Dashboard listando campanhas + criação rápida de campanha
 - [x] Migrations SQL (schema + RLS) e seed da campanha de exemplo
 
-Próximos sprints (2–4): CRUD completo de NPCs/Sessões/Missões/Locais, visão do
-Jogador, painel ao vivo, IA integrada e revelação progressiva de lore. Veja a
-sidebar — módulos ainda não implementados mostram um placeholder "em breve".
+**Sprint 2 — CRUD e visão do Jogador ✅ (implementado)**
+
+- [x] NPCs: CRUD completo, campos público/privado e revelação progressiva
+- [x] Locais: CRUD completo, descoberta progressiva e aninhamento (sublocais)
+- [x] Missões: CRUD, checklist de objetivos, recompensas e visibilidade
+- [x] Sessões: CRUD, resumo público × notas privadas do Mestre
+- [x] Facções: CRUD, relação com jogadores e segredos
+- [x] Área do Jogador (`/play`): vê apenas conteúdo liberado — NPCs revelados,
+      locais descobertos, missões públicas, sessões jogadas e a própria ficha
+- [x] Alternância Mestre ↔ Jogador no header
+
+Próximos sprints (3–4): painel ao vivo (iniciativa/HP em tempo real), IA
+integrada (improviso com contexto) e loot. Veja a sidebar — módulos ainda não
+implementados mostram um placeholder "em breve".
 
 ## Como rodar localmente
 
