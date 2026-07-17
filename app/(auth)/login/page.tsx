@@ -5,6 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { login, loginWithGoogle, type AuthState } from "../actions";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 
 const initialState: AuthState = {};
 
@@ -12,7 +13,8 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" fullWidth disabled={pending}>
-      {pending ? "Entrando…" : "⚔ Entrar na taverna"}
+      <Icon name="login" size={16} />
+      {pending ? "Entrando…" : "Entrar na taverna"}
     </Button>
   );
 }
@@ -70,7 +72,7 @@ export default function LoginPage() {
 
       <form action={loginWithGoogle}>
         <Button type="submit" fullWidth variant="ghost">
-          🔐 Entrar com Google
+          Entrar com Google
         </Button>
       </form>
 

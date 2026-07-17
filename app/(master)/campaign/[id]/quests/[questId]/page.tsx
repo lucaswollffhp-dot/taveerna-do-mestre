@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Icon } from "@/components/ui/Icon";
 import { DeleteButton } from "@/components/shared/DeleteButton";
 import { VisibilityControl } from "../VisibilityControl";
 import { deleteQuest } from "../actions";
@@ -52,7 +53,7 @@ export default async function QuestDetailPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title={quest.title}
-        icon="⚔️"
+        icon="quests"
         backHref={`${base}/quests`}
         backLabel="Missões"
         actions={
@@ -104,9 +105,10 @@ export default async function QuestDetailPage({
                 </p>
                 <Link
                   href={`${base}/npcs/${contractorData.id}`}
-                  className="text-sm text-accent hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm text-accent hover:underline"
                 >
-                  👤 {contractorData.name}
+                  <Icon name="npcs" size={14} />
+                  {contractorData.name}
                 </Link>
               </div>
             )}
@@ -117,9 +119,10 @@ export default async function QuestDetailPage({
                 </p>
                 <Link
                   href={`${base}/locations/${locationData.id}`}
-                  className="text-sm text-accent hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm text-accent hover:underline"
                 >
-                  🗺️ {locationData.name}
+                  <Icon name="pin" size={14} />
+                  {locationData.name}
                 </Link>
               </div>
             )}
@@ -134,7 +137,11 @@ export default async function QuestDetailPage({
             <ul className="space-y-1.5">
               {objectives.map((o, i) => (
                 <li key={i} className="flex items-center gap-2 text-sm">
-                  <span aria-hidden>{o.completed ? "☑" : "☐"}</span>
+                  <Icon
+                    name={o.completed ? "checkDone" : "checkTodo"}
+                    size={16}
+                    className={o.completed ? "text-accent" : "text-text-muted"}
+                  />
                   <span
                     className={
                       o.completed
@@ -154,8 +161,18 @@ export default async function QuestDetailPage({
           <Card className="space-y-2">
             <h2 className="font-title text-lg text-text">Recompensas</h2>
             <div className="flex flex-wrap gap-4 text-sm text-text-secondary">
-              {quest.reward_gold > 0 && <span>💰 {quest.reward_gold} PO</span>}
-              {quest.reward_xp > 0 && <span>✨ {quest.reward_xp} XP</span>}
+              {quest.reward_gold > 0 && (
+                <span className="inline-flex items-center gap-1.5">
+                  <Icon name="gold" size={15} className="text-accent" />
+                  {quest.reward_gold} PO
+                </span>
+              )}
+              {quest.reward_xp > 0 && (
+                <span className="inline-flex items-center gap-1.5">
+                  <Icon name="xp" size={15} className="text-accent" />
+                  {quest.reward_xp} XP
+                </span>
+              )}
             </div>
             {quest.reward_items && (
               <p className="text-sm text-text-secondary">

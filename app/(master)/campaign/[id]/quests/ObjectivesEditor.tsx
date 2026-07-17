@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import type { QuestObjective } from "@/lib/types/database.types";
 
 /**
@@ -54,7 +55,7 @@ export function ObjectivesEditor({
               onClick={() => remove(i)}
               aria-label="Remover objetivo"
             >
-              ✕
+              <Icon name="remove" size={15} />
             </Button>
           </li>
         ))}

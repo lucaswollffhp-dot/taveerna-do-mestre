@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Icon } from "@/components/ui/Icon";
 import { questStatus, questType } from "@/lib/labels";
 import type { Quest, QuestObjective } from "@/lib/types/database.types";
 
@@ -41,7 +42,7 @@ export default async function PlayerQuestsPage({
     <main className="mx-auto w-full max-w-4xl px-4 py-8 md:px-6">
       <PageHeader
         title="Missões"
-        icon="⚔️"
+        icon="quests"
         description="O que está em jogo agora."
         backHref={`/play/${params.id}`}
         backLabel="Visão geral"
@@ -49,7 +50,7 @@ export default async function PlayerQuestsPage({
 
       {quests.length === 0 ? (
         <EmptyState
-          icon="⚔️"
+          icon="quests"
           title="Nenhuma missão ativa"
           description="Quando seu Mestre liberar contratos e ganchos, eles aparecerão aqui."
         />
@@ -77,7 +78,13 @@ export default async function PlayerQuestsPage({
                   <ul className="space-y-1">
                     {objectives.map((o, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm">
-                        <span aria-hidden>{o.completed ? "☑" : "☐"}</span>
+                        <Icon
+                          name={o.completed ? "checkDone" : "checkTodo"}
+                          size={16}
+                          className={
+                            o.completed ? "text-accent" : "text-text-muted"
+                          }
+                        />
                         <span
                           className={
                             o.completed
@@ -95,9 +102,24 @@ export default async function PlayerQuestsPage({
                   quest.reward_xp > 0 ||
                   quest.reward_items) && (
                   <p className="flex flex-wrap gap-3 border-t border-border pt-2 text-xs text-text-muted">
-                    {quest.reward_gold > 0 && <span>💰 {quest.reward_gold} PO</span>}
-                    {quest.reward_xp > 0 && <span>✨ {quest.reward_xp} XP</span>}
-                    {quest.reward_items && <span>🎁 {quest.reward_items}</span>}
+                    {quest.reward_gold > 0 && (
+                      <span className="inline-flex items-center gap-1">
+                        <Icon name="gold" size={13} />
+                        {quest.reward_gold} PO
+                      </span>
+                    )}
+                    {quest.reward_xp > 0 && (
+                      <span className="inline-flex items-center gap-1">
+                        <Icon name="xp" size={13} />
+                        {quest.reward_xp} XP
+                      </span>
+                    )}
+                    {quest.reward_items && (
+                      <span className="inline-flex items-center gap-1">
+                        <Icon name="reward" size={13} />
+                        {quest.reward_items}
+                      </span>
+                    )}
                   </p>
                 )}
               </Card>

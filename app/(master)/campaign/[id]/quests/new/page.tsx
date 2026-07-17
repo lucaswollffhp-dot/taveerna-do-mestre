@@ -26,7 +26,7 @@ export default async function NewQuestPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Nova missão"
-        icon="⚔️"
+        icon="quests"
         backHref={`/campaign/${params.id}/quests`}
         backLabel="Missões"
       />

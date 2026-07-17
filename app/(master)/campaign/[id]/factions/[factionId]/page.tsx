@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Icon } from "@/components/ui/Icon";
 import { PrivacyBadge } from "@/components/shared/PrivacyBadge";
 import { DeleteButton } from "@/components/shared/DeleteButton";
 import { deleteFaction } from "../actions";
@@ -42,7 +43,7 @@ export default async function FactionDetailPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title={faction.name}
-        icon="⚜️"
+        icon="factions"
         backHref={`${base}/factions`}
         backLabel="Facções"
         actions={
@@ -108,9 +109,10 @@ export default async function FactionDetailPage({
                 <li key={n.id} className="flex items-center gap-2">
                   <Link
                     href={`${base}/npcs/${n.id}`}
-                    className="text-sm text-text-secondary hover:text-accent"
+                    className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-accent"
                   >
-                    👤 {n.name}
+                    <Icon name="npcs" size={14} />
+                    {n.name}
                   </Link>
                   <Badge tone={npcType.tones[n.type]}>
                     {npcType.labels[n.type]}

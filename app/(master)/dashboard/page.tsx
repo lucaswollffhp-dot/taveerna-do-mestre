@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { Icon } from "@/components/ui/Icon";
 import { NewCampaignForm } from "./NewCampaignForm";
 import type { Campaign, CampaignStatus } from "@/lib/types/database.types";
 
@@ -61,8 +62,11 @@ export default async function DashboardPage() {
 
       {campaigns.length === 0 && !error ? (
         <Card className="flex flex-col items-center gap-3 py-16 text-center">
-          <div className="text-4xl" aria-hidden>
-            🗺️
+          <div
+            className="flex h-14 w-14 items-center justify-center rounded-full
+              border border-border bg-surface-raised text-text-muted"
+          >
+            <Icon name="campaign" size={26} />
           </div>
           <h2 className="font-title text-lg text-text">
             Nenhuma campanha ainda

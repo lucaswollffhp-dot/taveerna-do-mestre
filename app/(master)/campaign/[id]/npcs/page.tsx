@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Icon } from "@/components/ui/Icon";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { RevelationControl } from "./RevelationControl";
 import { npcType, revelationStatus } from "@/lib/labels";
@@ -28,7 +29,7 @@ export default async function NpcsPage({
     <main className="mx-auto w-full max-w-5xl px-4 py-8 md:px-6">
       <PageHeader
         title="NPCs"
-        icon="👤"
+        icon="npcs"
         description="Personagens do mundo — com campos públicos e privados."
         backHref={base}
         backLabel="Visão geral"
@@ -41,7 +42,7 @@ export default async function NpcsPage({
 
       {npcs.length === 0 ? (
         <EmptyState
-          icon="👤"
+          icon="npcs"
           title="Nenhum NPC ainda"
           description="Crie o primeiro personagem do mundo para começar a povoar sua campanha."
         >
@@ -68,7 +69,10 @@ export default async function NpcsPage({
                     {npcType.labels[npc.type]}
                   </Badge>
                   {npc.revelation_status === "unknown" && (
-                    <Badge tone="default">🔒 Oculto p/ jogadores</Badge>
+                    <Badge tone="default" className="gap-1">
+                      <Icon name="private" size={11} />
+                      Oculto p/ jogadores
+                    </Badge>
                   )}
                 </div>
                 {npc.aliases && npc.aliases.length > 0 && (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
+import { Icon } from "@/components/ui/Icon";
 import { toggleQuestVisibility } from "./actions";
 
 function Toggle({ visible }: { visible: boolean }) {
@@ -16,7 +17,8 @@ function Toggle({ visible }: { visible: boolean }) {
             : "border-border bg-surface-raised text-text-secondary hover:text-text"
         }`}
     >
-      {visible ? "👁️ Visível aos jogadores" : "🔒 Oculta"}
+      <Icon name={visible ? "visible" : "hidden"} size={14} />
+      {visible ? "Visível aos jogadores" : "Oculta"}
     </button>
   );
 }

@@ -31,7 +31,7 @@ export default async function PlayerLocationsPage({
     <main className="mx-auto w-full max-w-4xl px-4 py-8 md:px-6">
       <PageHeader
         title="Locais descobertos"
-        icon="🗺️"
+        icon="locations"
         description="Os lugares por onde vocês já passaram ou ouviram falar."
         backHref={`/play/${params.id}`}
         backLabel="Visão geral"
@@ -39,7 +39,7 @@ export default async function PlayerLocationsPage({
 
       {locations.length === 0 ? (
         <EmptyState
-          icon="🗺️"
+          icon="locations"
           title="Nenhum local ainda"
           description="Explorem o mundo — os lugares que descobrirem aparecerão aqui."
         />

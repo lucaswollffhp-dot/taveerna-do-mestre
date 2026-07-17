@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Icon } from "@/components/ui/Icon";
 import { PrivacyBadge } from "@/components/shared/PrivacyBadge";
 import { DeleteButton } from "@/components/shared/DeleteButton";
 import { DiscoveryControl } from "../DiscoveryControl";
@@ -62,7 +63,7 @@ export default async function LocationDetailPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title={location.name}
-        icon="🗺️"
+        icon="locations"
         backHref={`${base}/locations`}
         backLabel="Locais"
         actions={
@@ -155,9 +156,10 @@ export default async function LocationDetailPage({
                 <li key={n.id}>
                   <Link
                     href={`${base}/npcs/${n.id}`}
-                    className="text-sm text-text-secondary hover:text-accent"
+                    className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-accent"
                   >
-                    👤 {n.name}
+                    <Icon name="npcs" size={14} />
+                    {n.name}
                   </Link>
                 </li>
               ))}

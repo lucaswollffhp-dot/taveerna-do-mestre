@@ -25,7 +25,7 @@ export default async function EditSessionPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Editar sessão"
-        icon="📜"
+        icon="sessions"
         backHref={`/campaign/${params.id}/sessions/${params.sessionId}`}
         backLabel={(session as Session).title}
       />

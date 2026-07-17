@@ -34,7 +34,7 @@ export default async function EditNpcPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Editar NPC"
-        icon="👤"
+        icon="npcs"
         backHref={`/campaign/${params.id}/npcs/${params.npcId}`}
         backLabel={(npc as Npc).name}
       />

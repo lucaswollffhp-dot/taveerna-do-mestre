@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Icon } from "@/components/ui/Icon";
 import { LogoutButton } from "./LogoutButton";
 
 interface HeaderProps {
@@ -17,9 +18,7 @@ export function Header({
   return (
     <header className="flex h-14 items-center justify-between border-b border-border bg-surface px-4 md:px-6">
       <Link href={homeHref} className="flex items-center gap-2">
-        <span className="text-xl" aria-hidden>
-          ⚔️
-        </span>
+        <Icon name="brand" size={20} className="text-accent" />
         <span className="font-title text-lg font-semibold text-accent">
           Taverna do Mestre
         </span>

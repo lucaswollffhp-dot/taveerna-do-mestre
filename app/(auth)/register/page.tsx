@@ -5,6 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { register, type AuthState } from "../actions";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 
 const initialState: AuthState = {};
 
@@ -12,7 +13,8 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" fullWidth disabled={pending}>
-      {pending ? "Criando…" : "📜 Criar conta"}
+      <Icon name="register" size={16} />
+      {pending ? "Criando…" : "Criar conta"}
     </Button>
   );
 }

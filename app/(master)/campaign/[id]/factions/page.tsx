@@ -27,7 +27,7 @@ export default async function FactionsPage({
     <main className="mx-auto w-full max-w-5xl px-4 py-8 md:px-6">
       <PageHeader
         title="Facções"
-        icon="⚜️"
+        icon="factions"
         description="Organizações e forças que movem o mundo."
         backHref={base}
         backLabel="Visão geral"
@@ -40,7 +40,7 @@ export default async function FactionsPage({
 
       {factions.length === 0 ? (
         <EmptyState
-          icon="⚜️"
+          icon="factions"
           title="Nenhuma facção ainda"
           description="Crie organizações para dar profundidade política ao mundo."
         >

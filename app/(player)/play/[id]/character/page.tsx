@@ -46,12 +46,12 @@ export default async function PlayerCharacterPage({
       <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
         <PageHeader
           title="Meu personagem"
-          icon="🛡️"
+          icon="character"
           backHref={`/play/${params.id}`}
           backLabel="Visão geral"
         />
         <EmptyState
-          icon="🛡️"
+          icon="character"
           title="Você ainda não tem um personagem"
           description="Seu Mestre criará e vinculará sua ficha a esta campanha. Assim que estiver pronta, ela aparecerá aqui."
         />
@@ -69,7 +69,7 @@ export default async function PlayerCharacterPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title={char.name}
-        icon="🛡️"
+        icon="character"
         description={`${char.race ?? ""} ${char.class ?? ""} · Nível ${char.level}`.trim()}
         backHref={`/play/${params.id}`}
         backLabel="Visão geral"

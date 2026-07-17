@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { Icon, type IconName } from "@/components/ui/Icon";
 import type { Campaign, CampaignStatus } from "@/lib/types/database.types";
 
 const statusLabels: Record<CampaignStatus, string> = {
@@ -14,7 +15,7 @@ const statusLabels: Record<CampaignStatus, string> = {
 interface ModuleLink {
   href: string;
   label: string;
-  icon: string;
+  icon: IconName;
   description: string;
 }
 
@@ -23,37 +24,37 @@ function modules(base: string): ModuleLink[] {
     {
       href: `${base}/sessions`,
       label: "Sessões",
-      icon: "📜",
+      icon: "sessions",
       description: "Planeje e registre cada sessão jogada.",
     },
     {
       href: `${base}/npcs`,
       label: "NPCs",
-      icon: "👤",
+      icon: "npcs",
       description: "Personagens do mundo com campos público/privado.",
     },
     {
       href: `${base}/quests`,
       label: "Missões",
-      icon: "⚔️",
+      icon: "quests",
       description: "Board de missões com objetivos e recompensas.",
     },
     {
       href: `${base}/locations`,
       label: "Locais",
-      icon: "🗺️",
+      icon: "locations",
       description: "Mapa conceitual dos lugares da campanha.",
     },
     {
       href: `${base}/live`,
       label: "Painel ao Vivo",
-      icon: "🎭",
+      icon: "live",
       description: "Conduza a sessão com iniciativa e HP em tempo real.",
     },
     {
       href: `${base}/ai`,
       label: "IA Assistente",
-      icon: "✨",
+      icon: "ai",
       description: "Improvise NPCs, cenas e consequências com contexto.",
     },
   ];
@@ -106,8 +107,11 @@ export default async function CampaignHubPage({
         {modules(base).map((mod) => (
           <Link key={mod.href} href={mod.href}>
             <Card className="h-full transition-colors hover:border-accent/50">
-              <div className="mb-2 text-2xl" aria-hidden>
-                {mod.icon}
+              <div
+                className="mb-3 flex h-10 w-10 items-center justify-center
+                  rounded-lg border border-border bg-surface-raised text-accent"
+              >
+                <Icon name={mod.icon} size={20} />
               </div>
               <h2 className="font-title text-lg text-text">{mod.label}</h2>
               <p className="mt-1 text-sm text-text-secondary">

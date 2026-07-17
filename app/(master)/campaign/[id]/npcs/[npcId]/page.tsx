@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Icon } from "@/components/ui/Icon";
 import { PrivacyBadge } from "@/components/shared/PrivacyBadge";
 import { DeleteButton } from "@/components/shared/DeleteButton";
 import { RevelationControl } from "../RevelationControl";
@@ -68,7 +69,7 @@ export default async function NpcDetailPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title={npc.name}
-        icon="👤"
+        icon="npcs"
         backHref={`${base}/npcs`}
         backLabel="NPCs"
         actions={
@@ -94,13 +95,15 @@ export default async function NpcDetailPage({
           {revelationStatus.labels[npc.revelation_status]}
         </Badge>
         {(faction.data as { name: string } | null) && (
-          <span className="text-sm text-text-secondary">
-            ⚜️ {(faction.data as { name: string }).name}
+          <span className="inline-flex items-center gap-1.5 text-sm text-text-secondary">
+            <Icon name="factions" size={14} />
+            {(faction.data as { name: string }).name}
           </span>
         )}
         {(location.data as { name: string } | null) && (
-          <span className="text-sm text-text-secondary">
-            🗺️ {(location.data as { name: string }).name}
+          <span className="inline-flex items-center gap-1.5 text-sm text-text-secondary">
+            <Icon name="pin" size={14} />
+            {(location.data as { name: string }).name}
           </span>
         )}
       </div>
