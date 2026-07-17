@@ -1,9 +1,10 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { Icon, type IconName } from "./Icon";
 
 interface PageHeaderProps {
   title: string;
-  icon?: string;
+  icon?: IconName;
   description?: string;
   /** Link "voltar" opcional (ex.: para a visão geral da campanha). */
   backHref?: string;
@@ -25,15 +26,16 @@ export function PageHeader({
       {backHref && (
         <Link
           href={backHref}
-          className="mb-3 inline-block text-sm text-text-secondary transition-colors hover:text-accent"
+          className="mb-3 inline-flex items-center gap-1 text-sm text-text-secondary transition-colors hover:text-accent"
         >
-          ← {backLabel}
+          <Icon name="back" size={15} />
+          {backLabel}
         </Link>
       )}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="flex items-center gap-2 font-title text-2xl font-bold text-text">
-            {icon && <span aria-hidden>{icon}</span>}
+          <h1 className="flex items-center gap-2.5 font-title text-2xl font-bold text-text">
+            {icon && <Icon name={icon} size={24} className="text-accent" />}
             {title}
           </h1>
           {description && (

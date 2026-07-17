@@ -19,7 +19,7 @@ export default async function NewLocationPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Novo local"
-        icon="🗺️"
+        icon="locations"
         backHref={`/campaign/${params.id}/locations`}
         backLabel="Locais"
       />

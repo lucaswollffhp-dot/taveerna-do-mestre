@@ -9,7 +9,7 @@ campanha de referência **"Os Três Selos do Abismo"** (D&D 5e, Forgotten Realms
 | Camada        | Tecnologia                                      |
 | ------------- | ----------------------------------------------- |
 | Frontend      | Next.js 14 (App Router) + TypeScript (strict)   |
-| Estilização   | Tailwind CSS                                     |
+| Estilização   | Tailwind CSS + ícones lucide-react               |
 | Banco / Auth  | Supabase (PostgreSQL + Auth + Realtime)          |
 | IA            | Anthropic API (`claude-sonnet-4-6`)              |
 | Hospedagem    | Vercel                                           |
@@ -36,10 +36,14 @@ campanha de referência **"Os Três Selos do Abismo"** (D&D 5e, Forgotten Realms
 - [x] Área do Jogador (`/play`): vê apenas conteúdo liberado — NPCs revelados,
       locais descobertos, missões públicas, sessões jogadas e a própria ficha
 - [x] Alternância Mestre ↔ Jogador no header
+- [x] Login com Google (OAuth via Supabase)
+- [x] Sistema de ícones profissional (lucide) centralizado em `components/ui/Icon.tsx`
+- [x] Loot: CRUD de itens/tesouro, situação (em posse/vendido/…) e vínculo a personagens
 
-Próximos sprints (3–4): painel ao vivo (iniciativa/HP em tempo real), IA
-integrada (improviso com contexto) e loot. Veja a sidebar — módulos ainda não
-implementados mostram um placeholder "em breve".
+Próximos sprints (3–4): painel ao vivo (iniciativa/HP em tempo real) e IA
+integrada (improviso com contexto). O plano de trabalho detalhado e a campanha
+piloto de referência ficam em [`docs/PLANO.md`](docs/PLANO.md). Veja a sidebar —
+módulos ainda não implementados mostram um placeholder "em breve".
 
 ## Como rodar localmente
 

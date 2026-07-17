@@ -25,7 +25,7 @@ export default async function EditFactionPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Editar facção"
-        icon="⚜️"
+        icon="factions"
         backHref={`/campaign/${params.id}/factions/${params.factionId}`}
         backLabel={(faction as Faction).name}
       />

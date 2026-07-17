@@ -27,7 +27,7 @@ export default async function SessionsPage({
     <main className="mx-auto w-full max-w-5xl px-4 py-8 md:px-6">
       <PageHeader
         title="Sessões"
-        icon="📜"
+        icon="sessions"
         description="Planeje e registre cada sessão da campanha."
         backHref={base}
         backLabel="Visão geral"
@@ -40,7 +40,7 @@ export default async function SessionsPage({
 
       {sessions.length === 0 ? (
         <EmptyState
-          icon="📜"
+          icon="sessions"
           title="Nenhuma sessão ainda"
           description="Registre a primeira sessão para acompanhar o andamento da campanha."
         >

@@ -48,7 +48,7 @@ export default async function PlayHomePage() {
 
       {campaigns.length === 0 ? (
         <EmptyState
-          icon="🎲"
+          icon="dice"
           title="Você ainda não está em nenhuma mesa"
           description="Peça ao seu Mestre para adicionar você a uma campanha. Assim que for convidado, ela aparecerá aqui."
         />

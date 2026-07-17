@@ -3,13 +3,14 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { Icon, type IconName } from "@/components/ui/Icon";
 import { campaignStatus } from "@/lib/labels";
 import type { Campaign } from "@/lib/types/database.types";
 
 interface Stat {
   href: string;
   label: string;
-  icon: string;
+  icon: IconName;
   count: number;
 }
 
@@ -68,18 +69,28 @@ export default async function PlayOverviewPage({
   ]);
 
   const stats: Stat[] = [
-    { href: `${base}/quests`, label: "Missões", icon: "⚔️", count: quests.count ?? 0 },
-    { href: `${base}/npcs`, label: "Conhecidos", icon: "👤", count: npcs.count ?? 0 },
+    {
+      href: `${base}/quests`,
+      label: "Missões",
+      icon: "quests",
+      count: quests.count ?? 0,
+    },
+    {
+      href: `${base}/npcs`,
+      label: "Conhecidos",
+      icon: "npcs",
+      count: npcs.count ?? 0,
+    },
     {
       href: `${base}/locations`,
       label: "Locais",
-      icon: "🗺️",
+      icon: "locations",
       count: locations.count ?? 0,
     },
     {
       href: `${base}/sessions`,
       label: "Sessões",
-      icon: "📜",
+      icon: "sessions",
       count: sessions.count ?? 0,
     },
   ];
@@ -111,8 +122,8 @@ export default async function PlayOverviewPage({
         <Link href={`${base}/character`}>
           <Card className="mb-6 flex items-center justify-between transition-colors hover:border-accent/50">
             <div className="flex items-center gap-3">
-              <span className="text-2xl" aria-hidden>
-                🛡️
+              <span className="text-accent" aria-hidden>
+                <Icon name="character" size={26} />
               </span>
               <div>
                 <p className="font-title text-lg text-text">{char.name}</p>
@@ -130,8 +141,8 @@ export default async function PlayOverviewPage({
         {stats.map((stat) => (
           <Link key={stat.href} href={stat.href}>
             <Card className="h-full text-center transition-colors hover:border-accent/50">
-              <div className="text-2xl" aria-hidden>
-                {stat.icon}
+              <div className="flex justify-center text-accent">
+                <Icon name={stat.icon} size={24} />
               </div>
               <p className="mt-2 font-title text-2xl text-text">{stat.count}</p>
               <p className="text-sm text-text-secondary">{stat.label}</p>

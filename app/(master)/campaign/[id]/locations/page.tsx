@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Icon } from "@/components/ui/Icon";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { DiscoveryControl } from "./DiscoveryControl";
 import { discoveryStatus } from "@/lib/labels";
@@ -28,7 +29,7 @@ export default async function LocationsPage({
     <main className="mx-auto w-full max-w-5xl px-4 py-8 md:px-6">
       <PageHeader
         title="Locais"
-        icon="🗺️"
+        icon="locations"
         description="Lugares da campanha, com descoberta progressiva."
         backHref={base}
         backLabel="Visão geral"
@@ -41,7 +42,7 @@ export default async function LocationsPage({
 
       {locations.length === 0 ? (
         <EmptyState
-          icon="🗺️"
+          icon="locations"
           title="Nenhum local ainda"
           description="Mapeie os lugares por onde a aventura vai passar."
         >
@@ -61,7 +62,10 @@ export default async function LocationsPage({
                   <span className="font-title text-lg text-text">{loc.name}</span>
                   {loc.type && <Badge tone="neutral">{loc.type}</Badge>}
                   {loc.discovery_status === "undiscovered" && (
-                    <Badge tone="default">🔒 Oculto p/ jogadores</Badge>
+                    <Badge tone="default" className="gap-1">
+                      <Icon name="private" size={11} />
+                      Oculto p/ jogadores
+                    </Badge>
                   )}
                 </div>
                 {loc.region && (

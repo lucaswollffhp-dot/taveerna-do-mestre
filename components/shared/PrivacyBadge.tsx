@@ -1,3 +1,5 @@
+import { Icon } from "@/components/ui/Icon";
+
 /**
  * Marca visual de campo privado (visível apenas para o Mestre).
  * Usado ao lado de labels de campos que os jogadores nunca veem.
@@ -10,7 +12,7 @@ export function PrivacyBadge({ label = "Privado" }: { label?: string }) {
         uppercase tracking-wide text-primary/90"
       title="Somente o Mestre vê este campo"
     >
-      <span aria-hidden>🔒</span>
+      <Icon name="private" size={11} />
       {label}
     </span>
   );

@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Icon } from "@/components/ui/Icon";
 import { PrivacyBadge } from "@/components/shared/PrivacyBadge";
 import { DeleteButton } from "@/components/shared/DeleteButton";
 import { deleteSession } from "../actions";
@@ -37,7 +38,7 @@ export default async function SessionDetailPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title={`#${session.number} — ${session.title}`}
-        icon="📜"
+        icon="sessions"
         backHref={`${base}/sessions`}
         backLabel="Sessões"
         actions={
@@ -67,8 +68,9 @@ export default async function SessionDetailPage({
           </span>
         )}
         {session.xp_awarded > 0 && (
-          <span className="text-sm text-text-secondary">
-            ✨ {session.xp_awarded} XP
+          <span className="inline-flex items-center gap-1.5 text-sm text-text-secondary">
+            <Icon name="xp" size={14} className="text-accent" />
+            {session.xp_awarded} XP
           </span>
         )}
       </div>

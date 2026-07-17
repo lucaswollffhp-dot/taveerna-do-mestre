@@ -38,6 +38,7 @@ export type QuestStatus =
   | "failed"
   | "abandoned";
 export type ItemStatus = "active" | "sold" | "destroyed" | "given" | "lost";
+export type EncounterStatus = "active" | "ended";
 
 export interface QuestObjective {
   text: string;
@@ -379,6 +380,60 @@ export interface Database {
         >;
         Relationships: [];
       };
+      encounters: {
+        Row: {
+          id: string;
+          campaign_id: string;
+          name: string;
+          status: EncounterStatus;
+          round: number;
+          turn_index: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          campaign_id: string;
+          name?: string;
+          status?: EncounterStatus;
+          round?: number;
+          turn_index?: number;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["encounters"]["Insert"]>;
+        Relationships: [];
+      };
+      combatants: {
+        Row: {
+          id: string;
+          encounter_id: string;
+          campaign_id: string;
+          character_id: string | null;
+          name: string;
+          initiative: number;
+          hp_current: number;
+          hp_max: number;
+          ac: number;
+          is_pc: boolean;
+          conditions: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          encounter_id: string;
+          campaign_id: string;
+          character_id?: string | null;
+          name: string;
+          initiative?: number;
+          hp_current?: number;
+          hp_max?: number;
+          ac?: number;
+          is_pc?: boolean;
+          conditions?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["combatants"]["Insert"]>;
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };
@@ -398,3 +453,5 @@ export type Npc = Database["public"]["Tables"]["npcs"]["Row"];
 export type Character = Database["public"]["Tables"]["characters"]["Row"];
 export type Quest = Database["public"]["Tables"]["quests"]["Row"];
 export type Item = Database["public"]["Tables"]["items"]["Row"];
+export type Encounter = Database["public"]["Tables"]["encounters"]["Row"];
+export type Combatant = Database["public"]["Tables"]["combatants"]["Row"];

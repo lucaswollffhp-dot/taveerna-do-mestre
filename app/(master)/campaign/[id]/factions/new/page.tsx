@@ -11,7 +11,7 @@ export default function NewFactionPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Nova facção"
-        icon="⚜️"
+        icon="factions"
         backHref={`/campaign/${params.id}/factions`}
         backLabel="Facções"
       />

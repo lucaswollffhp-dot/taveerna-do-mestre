@@ -29,7 +29,7 @@ export default async function PlayerSessionsPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Diário de campanha"
-        icon="📜"
+        icon="sessions"
         description="O relato das sessões que já jogaram."
         backHref={`/play/${params.id}`}
         backLabel="Visão geral"
@@ -37,7 +37,7 @@ export default async function PlayerSessionsPage({
 
       {sessions.length === 0 ? (
         <EmptyState
-          icon="📜"
+          icon="sessions"
           title="Nenhuma sessão registrada"
           description="Depois da primeira sessão jogada, o resumo aparecerá aqui."
         />

@@ -1,3 +1,5 @@
+import { Icon } from "@/components/ui/Icon";
+
 export default function AuthLayout({
   children,
 }: {
@@ -6,9 +8,12 @@ export default function AuthLayout({
   return (
     <main className="flex min-h-screen items-center justify-center bg-bg px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <div className="mb-2 text-4xl" aria-hidden>
-            ⚔️
+        <div className="mb-8 flex flex-col items-center text-center">
+          <div
+            className="mb-3 flex h-14 w-14 items-center justify-center
+              rounded-xl border border-accent/30 bg-surface text-accent"
+          >
+            <Icon name="brand" size={28} />
           </div>
           <h1 className="font-title text-3xl font-bold text-accent">
             Taverna do Mestre

@@ -26,7 +26,7 @@ export default async function NewNpcPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Novo NPC"
-        icon="👤"
+        icon="npcs"
         backHref={`/campaign/${params.id}/npcs`}
         backLabel="NPCs"
       />

@@ -31,7 +31,7 @@ export default async function PlayerNpcsPage({
     <main className="mx-auto w-full max-w-4xl px-4 py-8 md:px-6">
       <PageHeader
         title="Personagens conhecidos"
-        icon="👤"
+        icon="npcs"
         description="Quem vocês já conheceram nesta jornada."
         backHref={`/play/${params.id}`}
         backLabel="Visão geral"
@@ -39,7 +39,7 @@ export default async function PlayerNpcsPage({
 
       {npcs.length === 0 ? (
         <EmptyState
-          icon="👤"
+          icon="npcs"
           title="Ninguém ainda"
           description="Conforme vocês avançarem, os personagens que encontrarem aparecerão aqui."
         />

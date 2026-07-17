@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Icon, type IconName } from "@/components/ui/Icon";
 
 interface NavItem {
   href: string;
   label: string;
-  icon: string;
+  icon: IconName;
   highlight?: boolean;
 }
 
@@ -21,12 +22,12 @@ function buildGroups(campaignId: string): NavGroup[] {
     {
       title: "Campanha",
       items: [
-        { href: base, label: "Visão geral", icon: "🏰" },
-        { href: `${base}/sessions`, label: "Sessões", icon: "📜" },
+        { href: base, label: "Visão geral", icon: "overview" },
+        { href: `${base}/sessions`, label: "Sessões", icon: "sessions" },
         {
           href: `${base}/live`,
           label: "Painel ao Vivo",
-          icon: "🎭",
+          icon: "live",
           highlight: true,
         },
       ],
@@ -34,21 +35,21 @@ function buildGroups(campaignId: string): NavGroup[] {
     {
       title: "Mundo",
       items: [
-        { href: `${base}/npcs`, label: "NPCs", icon: "👤" },
-        { href: `${base}/locations`, label: "Locais", icon: "🗺️" },
-        { href: `${base}/factions`, label: "Facções", icon: "⚜️" },
+        { href: `${base}/npcs`, label: "NPCs", icon: "npcs" },
+        { href: `${base}/locations`, label: "Locais", icon: "locations" },
+        { href: `${base}/factions`, label: "Facções", icon: "factions" },
       ],
     },
     {
       title: "Aventura",
       items: [
-        { href: `${base}/quests`, label: "Missões", icon: "⚔️" },
-        { href: `${base}/loot`, label: "Loot", icon: "💰" },
+        { href: `${base}/quests`, label: "Missões", icon: "quests" },
+        { href: `${base}/loot`, label: "Loot", icon: "loot" },
       ],
     },
     {
       title: "Ferramentas",
-      items: [{ href: `${base}/ai`, label: "IA Assistente", icon: "✨" }],
+      items: [{ href: `${base}/ai`, label: "IA Assistente", icon: "ai" }],
     },
   ];
 }
@@ -62,9 +63,10 @@ export function Sidebar({ campaignId }: { campaignId: string }) {
       <nav className="flex flex-col gap-6 p-4">
         <Link
           href="/dashboard"
-          className="text-sm text-text-secondary transition-colors hover:text-accent"
+          className="inline-flex items-center gap-1.5 text-sm text-text-secondary transition-colors hover:text-accent"
         >
-          ← Campanhas
+          <Icon name="back" size={15} />
+          Campanhas
         </Link>
         {groups.map((group) => (
           <div key={group.title}>
@@ -89,7 +91,7 @@ export function Sidebar({ campaignId }: { campaignId: string }) {
                         }
                         ${item.highlight ? "font-medium text-accent" : ""}`}
                     >
-                      <span aria-hidden>{item.icon}</span>
+                      <Icon name={item.icon} size={18} />
                       {item.label}
                     </Link>
                   </li>

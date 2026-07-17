@@ -34,7 +34,7 @@ export default async function EditQuestPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Editar missão"
-        icon="⚔️"
+        icon="quests"
         backHref={`/campaign/${params.id}/quests/${params.questId}`}
         backLabel={(quest as Quest).title}
       />

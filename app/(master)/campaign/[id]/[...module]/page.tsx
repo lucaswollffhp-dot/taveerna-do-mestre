@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
+import { Icon } from "@/components/ui/Icon";
 
 const titles: Record<string, string> = {
   sessions: "Sessões",
@@ -28,8 +29,11 @@ export default function ModulePlaceholder({
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-12 md:px-6">
       <Card className="flex flex-col items-center gap-3 py-16 text-center">
-        <div className="text-4xl" aria-hidden>
-          🚧
+        <div
+          className="flex h-14 w-14 items-center justify-center rounded-full
+            border border-border bg-surface-raised text-text-muted"
+        >
+          <Icon name="construction" size={26} />
         </div>
         <h1 className="font-title text-2xl text-text">{title}</h1>
         <p className="max-w-sm text-sm text-text-secondary">
@@ -37,9 +41,10 @@ export default function ModulePlaceholder({
         </p>
         <Link
           href={`/campaign/${params.id}`}
-          className="mt-2 text-sm text-accent hover:underline"
+          className="mt-2 inline-flex items-center gap-1.5 text-sm text-accent hover:underline"
         >
-          ← Voltar à visão geral
+          <Icon name="back" size={15} />
+          Voltar à visão geral
         </Link>
       </Card>
     </main>

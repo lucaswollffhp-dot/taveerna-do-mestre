@@ -28,7 +28,7 @@ export default async function EditLocationPage({
     <main className="mx-auto w-full max-w-3xl px-4 py-8 md:px-6">
       <PageHeader
         title="Editar local"
-        icon="🗺️"
+        icon="locations"
         backHref={`/campaign/${params.id}/locations/${params.locationId}`}
         backLabel={(location as Location).name}
       />

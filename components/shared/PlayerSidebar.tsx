@@ -2,22 +2,24 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Icon, type IconName } from "@/components/ui/Icon";
 
 interface NavItem {
   href: string;
   label: string;
-  icon: string;
+  icon: IconName;
 }
 
 function buildItems(campaignId: string): NavItem[] {
   const base = `/play/${campaignId}`;
   return [
-    { href: base, label: "Visão geral", icon: "🏰" },
-    { href: `${base}/character`, label: "Meu personagem", icon: "🛡️" },
-    { href: `${base}/quests`, label: "Missões", icon: "⚔️" },
-    { href: `${base}/npcs`, label: "Conhecidos", icon: "👤" },
-    { href: `${base}/locations`, label: "Locais", icon: "🗺️" },
-    { href: `${base}/sessions`, label: "Diário", icon: "📜" },
+    { href: base, label: "Visão geral", icon: "overview" },
+    { href: `${base}/live`, label: "Painel ao Vivo", icon: "live" },
+    { href: `${base}/character`, label: "Meu personagem", icon: "character" },
+    { href: `${base}/quests`, label: "Missões", icon: "quests" },
+    { href: `${base}/npcs`, label: "Conhecidos", icon: "npcs" },
+    { href: `${base}/locations`, label: "Locais", icon: "locations" },
+    { href: `${base}/sessions`, label: "Diário", icon: "sessions" },
   ];
 }
 
@@ -30,9 +32,10 @@ export function PlayerSidebar({ campaignId }: { campaignId: string }) {
       <nav className="flex flex-col gap-1 p-4">
         <Link
           href="/play"
-          className="mb-4 text-sm text-text-secondary transition-colors hover:text-accent"
+          className="mb-4 inline-flex items-center gap-1.5 text-sm text-text-secondary transition-colors hover:text-accent"
         >
-          ← Minhas mesas
+          <Icon name="back" size={15} />
+          Minhas mesas
         </Link>
         {items.map((item) => {
           const active =
@@ -49,7 +52,7 @@ export function PlayerSidebar({ campaignId }: { campaignId: string }) {
                     : "text-text-secondary hover:bg-surface-raised hover:text-text"
                 }`}
             >
-              <span aria-hidden>{item.icon}</span>
+              <Icon name={item.icon} size={18} />
               {item.label}
             </Link>
           );
