@@ -15,6 +15,8 @@ interface ImageUploadProps {
   hint?: string;
   required?: boolean;
   shape?: "circle" | "rect";
+  /** Notificado quando a URL muda (upload concluído ou remoção). */
+  onChange?: (url: string) => void;
 }
 
 export function ImageUpload({
@@ -26,11 +28,17 @@ export function ImageUpload({
   hint,
   required,
   shape = "circle",
+  onChange,
 }: ImageUploadProps) {
   const [url, setUrl] = useState(defaultUrl ?? "");
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  function apply(next: string) {
+    setUrl(next);
+    onChange?.(next);
+  }
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -46,7 +54,7 @@ export function ImageUpload({
         .upload(path, file, { upsert: true, cacheControl: "3600" });
       if (upErr) throw upErr;
       const { data } = supabase.storage.from("assets").getPublicUrl(path);
-      setUrl(data.publicUrl);
+      apply(data.publicUrl);
     } catch {
       setError("Falha ao enviar a imagem. Tente novamente.");
     } finally {
@@ -93,7 +101,7 @@ export function ImageUpload({
           {url && (
             <button
               type="button"
-              onClick={() => setUrl("")}
+              onClick={() => apply("")}
               className="w-fit text-xs text-text-muted hover:text-primary"
             >
               Remover

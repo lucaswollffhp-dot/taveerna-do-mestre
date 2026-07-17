@@ -25,11 +25,12 @@ function buildGroups(campaignId: string): NavGroup[] {
         { href: base, label: "Visão geral", icon: "overview" },
         { href: `${base}/sessions`, label: "Sessões", icon: "sessions" },
         {
-          href: `${base}/scenes`,
-          label: "Mesa",
+          href: `${base}/mesa`,
+          label: "Mesa de Jogo",
           icon: "table",
           highlight: true,
         },
+        { href: `${base}/scenes`, label: "Cenas", icon: "locations" },
         {
           href: `${base}/live`,
           label: "Painel ao Vivo",

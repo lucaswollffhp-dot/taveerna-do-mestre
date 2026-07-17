@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { SceneBoard } from "@/components/table/SceneBoard";
+import { GameEnvironment } from "@/components/game/GameEnvironment";
 
 export default async function PlayerTablePage({
   params,
@@ -19,19 +18,10 @@ export default async function PlayerTablePage({
   }
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-8 md:px-6">
-      <PageHeader
-        title="Mesa"
-        icon="table"
-        description="O mapa da cena atual. Arraste o seu token para movê-lo."
-        backHref={`/play/${params.id}`}
-        backLabel="Visão geral"
-      />
-      <SceneBoard
-        campaignId={params.id}
-        isMaster={false}
-        currentUserId={auth.user!.id}
-      />
-    </main>
+    <GameEnvironment
+      campaignId={params.id}
+      isMaster={false}
+      currentUserId={auth.user!.id}
+    />
   );
 }
