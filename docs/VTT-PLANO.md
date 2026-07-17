@@ -83,18 +83,22 @@ no mapa é o mesmo Aldric da ficha; o HP no Painel ao Vivo e no token são um s�
 
 ## 4. Roadmap por fases
 
-### Fase A — Fundação de mídia + Fichas de personagem 🔜
-*(pré-requisito de tudo: hoje não existe tela de criar personagem)*
-- Upload de imagens para o Supabase Storage (helper reutilizável).
-- **CRUD de personagens** (Mestre cria/vincula a um jogador; jogador edita a
-  própria ficha) — desbloqueia também o "Adicionar jogadores" do Painel ao Vivo.
-- Campo de **arte de token (PNG) obrigatório** em personagens e NPCs.
+### Fase A — Fundação de mídia + Fichas de personagem ✅
+- [x] Upload de imagens para o Supabase Storage (`components/ui/ImageUpload`).
+- [x] **CRUD de personagens** (Mestre cria; vínculo a um jogador que controla
+      o token) — desbloqueia também o "Adicionar jogadores" do Painel ao Vivo.
+- [x] **Arte de token (PNG) obrigatória** em personagens; opcional em NPCs
+      (fallback: moeda com a inicial do nome).
 
-### Fase B — Mesa Tática (o coração do VTT) 🔜
-- CRUD de **cenas** (Mestre sobe um mapa por cena; marca a cena ativa).
-- Colocar tokens na cena a partir de NPCs/personagens (ou token avulso).
-- **Arrastar tokens em tempo real**; Mestre move todos, jogador move o seu.
-- Visão do jogador espelha a cena ativa.
+### Fase B — Mesa Tática (o coração do VTT) ✅
+- [x] CRUD de **cenas** (mapa por cena; marcar a cena ativa).
+- [x] Colocar tokens na cena a partir de personagens/NPCs (ou token avulso).
+- [x] **Arrastar tokens em tempo real**; Mestre move todos, jogador move o seu.
+- [x] Visão do jogador espelha a cena ativa.
+
+> Migration correspondente: `supabase/migrations/0004_vtt.sql` (tabelas
+> `scenes`/`tokens`, colunas de token art, bucket de Storage `assets`, RLS e
+> publicação Realtime).
 
 ### Fase C — Ferramentas de combate tático
 - Grid + snap + medição de distância.

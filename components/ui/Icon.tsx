@@ -13,6 +13,7 @@ import {
   Gift,
   Inbox,
   LayoutDashboard,
+  LayoutGrid,
   Lock,
   LogIn,
   LogOut,
@@ -66,7 +67,8 @@ export type IconName =
   | "gold"
   | "xp"
   | "reward"
-  | "pin";
+  | "pin"
+  | "table";
 
 const icons: Record<IconName, LucideIcon> = {
   overview: LayoutDashboard,
@@ -99,6 +101,7 @@ const icons: Record<IconName, LucideIcon> = {
   xp: Zap,
   reward: Gift,
   pin: MapPin,
+  table: LayoutGrid,
 };
 
 interface IconProps {

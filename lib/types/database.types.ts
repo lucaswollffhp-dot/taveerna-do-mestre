@@ -39,6 +39,7 @@ export type QuestStatus =
   | "abandoned";
 export type ItemStatus = "active" | "sold" | "destroyed" | "given" | "lost";
 export type EncounterStatus = "active" | "ended";
+export type TokenRefType = "character" | "npc" | "custom";
 
 export interface QuestObjective {
   text: string;
@@ -197,6 +198,7 @@ export interface Database {
           secrets: string | null;
           master_notes: string | null;
           revelation_status: RevelationStatus;
+          token_image_url: string | null;
           created_at: string;
         };
         Insert: {
@@ -213,6 +215,7 @@ export interface Database {
           secrets?: string | null;
           master_notes?: string | null;
           revelation_status?: RevelationStatus;
+          token_image_url?: string | null;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["npcs"]["Insert"]>;
@@ -237,6 +240,7 @@ export interface Database {
           gold: number;
           background: string | null;
           secrets: string | null;
+          token_image_url: string | null;
           created_at: string;
         };
         Insert: {
@@ -257,6 +261,7 @@ export interface Database {
           gold?: number;
           background?: string | null;
           secrets?: string | null;
+          token_image_url?: string | null;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["characters"]["Insert"]>;
@@ -434,6 +439,64 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["combatants"]["Insert"]>;
         Relationships: [];
       };
+      scenes: {
+        Row: {
+          id: string;
+          campaign_id: string;
+          name: string;
+          map_image_url: string | null;
+          grid_size: number;
+          grid_enabled: boolean;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          campaign_id: string;
+          name?: string;
+          map_image_url?: string | null;
+          grid_size?: number;
+          grid_enabled?: boolean;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["scenes"]["Insert"]>;
+        Relationships: [];
+      };
+      tokens: {
+        Row: {
+          id: string;
+          scene_id: string;
+          campaign_id: string;
+          name: string;
+          image_url: string | null;
+          color: string;
+          x: number;
+          y: number;
+          size: number;
+          ref_type: TokenRefType;
+          ref_id: string | null;
+          controlled_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          scene_id: string;
+          campaign_id: string;
+          name?: string;
+          image_url?: string | null;
+          color?: string;
+          x?: number;
+          y?: number;
+          size?: number;
+          ref_type?: TokenRefType;
+          ref_id?: string | null;
+          controlled_by?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["tokens"]["Insert"]>;
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };
@@ -455,3 +518,5 @@ export type Quest = Database["public"]["Tables"]["quests"]["Row"];
 export type Item = Database["public"]["Tables"]["items"]["Row"];
 export type Encounter = Database["public"]["Tables"]["encounters"]["Row"];
 export type Combatant = Database["public"]["Tables"]["combatants"]["Row"];
+export type Scene = Database["public"]["Tables"]["scenes"]["Row"];
+export type Token = Database["public"]["Tables"]["tokens"]["Row"];

@@ -14,6 +14,7 @@ function buildItems(campaignId: string): NavItem[] {
   const base = `/play/${campaignId}`;
   return [
     { href: base, label: "Visão geral", icon: "overview" },
+    { href: `${base}/table`, label: "Mesa", icon: "table" },
     { href: `${base}/live`, label: "Painel ao Vivo", icon: "live" },
     { href: `${base}/character`, label: "Meu personagem", icon: "character" },
     { href: `${base}/quests`, label: "Missões", icon: "quests" },

@@ -5,6 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { InputField, SelectField, TextareaField } from "@/components/ui/Field";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 import { PrivacyBadge } from "@/components/shared/PrivacyBadge";
 import { npcType, revelationStatus, toOptions } from "@/lib/labels";
 import type { NpcFormState } from "./actions";
@@ -60,6 +61,14 @@ export function NpcForm({
       {/* ── Seção pública ── */}
       <Card className="space-y-4">
         <h2 className="font-title text-lg text-text">Identidade</h2>
+        <ImageUpload
+          name="token_image_url"
+          campaignId={campaignId}
+          folder="tokens"
+          defaultUrl={npc?.token_image_url}
+          label="Arte do token (opcional)"
+          hint="Sem imagem, o token vira uma moeda com a inicial do nome."
+        />
         <div className="grid gap-4 sm:grid-cols-2">
           <InputField
             label="Nome"
