@@ -39,11 +39,19 @@ campanha de referência **"Os Três Selos do Abismo"** (D&D 5e, Forgotten Realms
 - [x] Login com Google (OAuth via Supabase)
 - [x] Sistema de ícones profissional (lucide) centralizado em `components/ui/Icon.tsx`
 - [x] Loot: CRUD de itens/tesouro, situação (em posse/vendido/…) e vínculo a personagens
+- [x] Painel ao Vivo: combate (iniciativa/HP) em tempo real (Supabase Realtime)
 
-Próximos sprints (3–4): painel ao vivo (iniciativa/HP em tempo real) e IA
-integrada (improviso com contexto). O plano de trabalho detalhado e a campanha
-piloto de referência ficam em [`docs/PLANO.md`](docs/PLANO.md). Veja a sidebar —
-módulos ainda não implementados mostram um placeholder "em breve".
+**VTT — Mesa tática ✅ (v1 implementada)**
+
+- [x] Fichas de **personagem** (CRUD) com arte de token (PNG) obrigatória
+- [x] Arte de token (opcional) nos NPCs; upload via Supabase Storage
+- [x] **Mesa/Cenas**: mapa por cena, tokens em forma de moeda arrastáveis,
+      sincronizados em tempo real (Mestre move todos; jogador move o seu)
+
+O plano de trabalho e a campanha piloto ficam em [`docs/PLANO.md`](docs/PLANO.md);
+o plano de evolução para VTT (pesquisa de concorrentes + roadmap) em
+[`docs/VTT-PLANO.md`](docs/VTT-PLANO.md). Próximas fases: grid/medição, névoa de
+guerra e integração da iniciativa ao mapa.
 
 ## Como rodar localmente
 

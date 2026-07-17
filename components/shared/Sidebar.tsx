@@ -25,6 +25,12 @@ function buildGroups(campaignId: string): NavGroup[] {
         { href: base, label: "Visão geral", icon: "overview" },
         { href: `${base}/sessions`, label: "Sessões", icon: "sessions" },
         {
+          href: `${base}/scenes`,
+          label: "Mesa",
+          icon: "table",
+          highlight: true,
+        },
+        {
           href: `${base}/live`,
           label: "Painel ao Vivo",
           icon: "live",
@@ -35,6 +41,7 @@ function buildGroups(campaignId: string): NavGroup[] {
     {
       title: "Mundo",
       items: [
+        { href: `${base}/characters`, label: "Personagens", icon: "character" },
         { href: `${base}/npcs`, label: "NPCs", icon: "npcs" },
         { href: `${base}/locations`, label: "Locais", icon: "locations" },
         { href: `${base}/factions`, label: "Facções", icon: "factions" },

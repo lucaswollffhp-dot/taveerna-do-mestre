@@ -41,6 +41,7 @@ function buildPayload(formData: FormData) {
     revelation_status: (String(
       formData.get("revelation_status") ?? "unknown",
     ) as RevelationStatus),
+    token_image_url: nullable(formData.get("token_image_url")),
   };
 }
 
