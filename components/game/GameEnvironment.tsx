@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { useTable } from "@/lib/table";
+import { useLiveEncounter } from "@/lib/live";
 import { SceneStage } from "./SceneStage";
 import { ScenePanel } from "./panels/ScenePanel";
 import { CombatPanel } from "./panels/CombatPanel";
@@ -46,8 +47,18 @@ export function GameEnvironment({
   npcs = [],
 }: GameEnvironmentProps) {
   const { scene, tokens, refresh } = useTable(campaignId);
+  const { encounter, combatants } = useLiveEncounter(campaignId);
   const supabase = createClient();
   const [open, setOpen] = useState<string | null>(isMaster ? "scene" : null);
+  const [fogMode, setFogMode] = useState(false);
+
+  const activeCombatant =
+    encounter && combatants.length > 0
+      ? combatants[encounter.turn_index % combatants.length]
+      : null;
+  const activeMatch = activeCombatant
+    ? { characterId: activeCombatant.character_id, name: activeCombatant.name }
+    : null;
 
   const canMove = useCallback(
     (t: Token) => isMaster || t.controlled_by === currentUserId,
@@ -103,6 +114,33 @@ export function GameEnvironment({
     [supabase, refresh],
   );
 
+  const revealRect = useCallback(
+    async (rect: { x: number; y: number; w: number; h: number }) => {
+      if (!scene) return;
+      const current = Array.isArray(scene.fog_revealed)
+        ? (scene.fog_revealed as unknown[])
+        : [];
+      await supabase
+        .from("scenes")
+        .update({ fog_revealed: [...current, rect] as never })
+        .eq("id", scene.id);
+      await refresh();
+    },
+    [scene, supabase, refresh],
+  );
+
+  const setFog = useCallback(
+    async (patch: { fog_enabled?: boolean; clear?: boolean }) => {
+      if (!scene) return;
+      const update: Record<string, unknown> = {};
+      if (patch.fog_enabled !== undefined) update.fog_enabled = patch.fog_enabled;
+      if (patch.clear) update.fog_revealed = [];
+      await supabase.from("scenes").update(update as never).eq("id", scene.id);
+      await refresh();
+    },
+    [scene, supabase, refresh],
+  );
+
   const masterDock: DockItem[] = [
     {
       key: "scene",
@@ -118,6 +156,11 @@ export function GameEnvironment({
           onAddToken={addToken}
           onAddCustom={addCustom}
           onRemoveToken={removeToken}
+          fogMode={fogMode}
+          onToggleFogMode={() => setFogMode((v) => !v)}
+          onToggleFog={() => setFog({ fog_enabled: !scene?.fog_enabled })}
+          onCoverAll={() => setFog({ fog_enabled: true, clear: true })}
+          onRevealAll={() => setFog({ fog_enabled: false, clear: true })}
         />
       ),
     },
@@ -230,6 +273,10 @@ export function GameEnvironment({
             tokens={tokens}
             canMove={canMove}
             onPersist={persist}
+            isMaster={isMaster}
+            fogMode={fogMode}
+            onRevealRect={revealRect}
+            activeMatch={activeMatch}
           />
         </div>
 

@@ -448,6 +448,8 @@ export interface Database {
           grid_size: number;
           grid_enabled: boolean;
           is_active: boolean;
+          fog_enabled: boolean;
+          fog_revealed: Json;
           created_at: string;
         };
         Insert: {
@@ -458,6 +460,8 @@ export interface Database {
           grid_size?: number;
           grid_enabled?: boolean;
           is_active?: boolean;
+          fog_enabled?: boolean;
+          fog_revealed?: Json;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["scenes"]["Insert"]>;

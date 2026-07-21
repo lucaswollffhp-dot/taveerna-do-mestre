@@ -20,6 +20,11 @@ interface ScenePanelProps {
   onAddToken: (entry: PaletteEntry, refType: "character" | "npc") => void;
   onAddCustom: () => void;
   onRemoveToken: (id: string) => void;
+  fogMode: boolean;
+  onToggleFogMode: () => void;
+  onToggleFog: () => void;
+  onCoverAll: () => void;
+  onRevealAll: () => void;
 }
 
 export function ScenePanel({
@@ -31,6 +36,11 @@ export function ScenePanel({
   onAddToken,
   onAddCustom,
   onRemoveToken,
+  fogMode,
+  onToggleFogMode,
+  onToggleFog,
+  onCoverAll,
+  onRevealAll,
 }: ScenePanelProps) {
   const supabase = createClient();
   const { rows: scenes } = useLiveRows<Scene>("scenes", campaignId, {
@@ -135,6 +145,49 @@ export function ScenePanel({
           </Button>
         </div>
       </div>
+
+      {/* Névoa de guerra */}
+      {activeScene && (
+        <div className="space-y-2 rounded-md border border-border bg-surface-raised p-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-title text-text">Névoa de guerra</h3>
+            <button
+              onClick={onToggleFog}
+              className={`rounded-full border px-2.5 py-1 text-xs transition-colors ${
+                activeScene.fog_enabled
+                  ? "border-accent/50 bg-accent/20 text-accent"
+                  : "border-border text-text-muted hover:text-text"
+              }`}
+            >
+              {activeScene.fog_enabled ? "Ativa" : "Desligada"}
+            </button>
+          </div>
+          {activeScene.fog_enabled && (
+            <>
+              <p className="text-xs text-text-muted">
+                No modo revelar, arraste sobre o mapa para descobrir áreas para
+                os jogadores.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  variant={fogMode ? "primary" : "ghost"}
+                  onClick={onToggleFogMode}
+                >
+                  <Icon name={fogMode ? "visible" : "hidden"} size={14} />
+                  {fogMode ? "Revelando…" : "Revelar áreas"}
+                </Button>
+                <Button size="sm" variant="ghost" onClick={onCoverAll}>
+                  Cobrir tudo
+                </Button>
+                <Button size="sm" variant="ghost" onClick={onRevealAll}>
+                  Revelar tudo
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
 
       {/* Tokens da cena ativa */}
       <div className="space-y-2">

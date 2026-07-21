@@ -6,6 +6,8 @@ interface TokenAvatarProps {
   /** Cor de fundo do fallback (moeda com inicial). */
   color?: string;
   className?: string;
+  /** Destaque (ex.: token do turno atual no combate). */
+  highlight?: boolean;
 }
 
 /**
@@ -18,11 +20,16 @@ export function TokenAvatar({
   size = 40,
   color = "#8b1a1a",
   className = "",
+  highlight = false,
 }: TokenAvatarProps) {
   const initial = name.trim().charAt(0).toUpperCase() || "?";
   return (
     <div
-      className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-black/40 shadow ${className}`}
+      className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full border-2 shadow ${
+        highlight
+          ? "border-accent shadow-[0_0_0_3px_rgba(212,163,31,.6)]"
+          : "border-black/40"
+      } ${className}`}
       style={{ width: size, height: size, background: imageUrl ? undefined : color }}
     >
       {imageUrl ? (
