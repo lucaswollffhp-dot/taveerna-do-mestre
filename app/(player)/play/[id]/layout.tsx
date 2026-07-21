@@ -14,7 +14,7 @@ export default async function PlayCampaignLayout({
   // Só entra quem tem visibilidade da campanha (RLS: membro ou mestre).
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("id")
+    .select("id, name")
     .eq("id", params.id)
     .maybeSingle();
 
@@ -24,7 +24,10 @@ export default async function PlayCampaignLayout({
 
   return (
     <div className="flex flex-1">
-      <PlayerSidebar campaignId={params.id} />
+      <PlayerSidebar
+        campaignId={params.id}
+        campaignName={(campaign as { name: string }).name}
+      />
       <div className="min-w-0 flex-1">{children}</div>
     </div>
   );

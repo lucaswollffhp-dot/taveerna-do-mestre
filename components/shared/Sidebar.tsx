@@ -8,11 +8,12 @@ interface NavItem {
   href: string;
   label: string;
   icon: IconName;
-  highlight?: boolean;
+  /** Correspondência exata do pathname (para o item "Painel"). */
+  exact?: boolean;
 }
 
 interface NavGroup {
-  title: string;
+  title?: string;
   items: NavItem[];
 }
 
@@ -20,23 +21,9 @@ function buildGroups(campaignId: string): NavGroup[] {
   const base = `/campaign/${campaignId}`;
   return [
     {
-      title: "Campanha",
       items: [
-        { href: base, label: "Visão geral", icon: "overview" },
-        { href: `${base}/sessions`, label: "Sessões", icon: "sessions" },
-        {
-          href: `${base}/mesa`,
-          label: "Mesa de Jogo",
-          icon: "table",
-          highlight: true,
-        },
-        { href: `${base}/scenes`, label: "Cenas", icon: "locations" },
-        {
-          href: `${base}/live`,
-          label: "Painel ao Vivo",
-          icon: "live",
-          highlight: true,
-        },
+        { href: base, label: "Painel", icon: "overview", exact: true },
+        { href: `${base}/mesa`, label: "Mesa", icon: "table" },
       ],
     },
     {
@@ -53,6 +40,7 @@ function buildGroups(campaignId: string): NavGroup[] {
       items: [
         { href: `${base}/quests`, label: "Missões", icon: "quests" },
         { href: `${base}/loot`, label: "Loot", icon: "loot" },
+        { href: `${base}/sessions`, label: "Sessões", icon: "sessions" },
       ],
     },
     {
@@ -62,45 +50,78 @@ function buildGroups(campaignId: string): NavGroup[] {
   ];
 }
 
-export function Sidebar({ campaignId }: { campaignId: string }) {
+function isActive(pathname: string, item: NavItem): boolean {
+  if (item.exact) return pathname === item.href;
+  return pathname === item.href || pathname.startsWith(`${item.href}/`);
+}
+
+export function Sidebar({
+  campaignId,
+  campaignName,
+}: {
+  campaignId: string;
+  campaignName?: string;
+}) {
   const pathname = usePathname();
   const groups = buildGroups(campaignId);
+  const base = `/campaign/${campaignId}`;
 
   return (
-    <aside className="hidden w-60 shrink-0 border-r border-border bg-surface md:block">
-      <nav className="flex flex-col gap-6 p-4">
+    <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-gradient-to-b from-surface to-[#191926] md:flex">
+      {/* Contexto da campanha */}
+      <div className="border-b border-border px-4 py-4">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm text-text-secondary transition-colors hover:text-accent"
+          className="mb-2 inline-flex items-center gap-1.5 text-xs text-text-muted transition-colors hover:text-accent"
         >
-          <Icon name="back" size={15} />
+          <Icon name="back" size={13} />
           Campanhas
         </Link>
-        {groups.map((group) => (
-          <div key={group.title}>
-            <p className="mb-2 px-2 font-title text-xs uppercase tracking-widest text-text-muted">
-              {group.title}
-            </p>
+        <p className="truncate font-title text-lg font-semibold text-text">
+          {campaignName ?? "Campanha"}
+        </p>
+        <span className="mt-1 inline-block rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-accent">
+          Mestre
+        </span>
+      </div>
+
+      <nav className="flex flex-1 flex-col gap-5 overflow-y-auto p-3">
+        {groups.map((group, gi) => (
+          <div key={group.title ?? gi}>
+            {group.title && (
+              <p className="section-label mb-1.5">{group.title}</p>
+            )}
             <ul className="space-y-0.5">
               {group.items.map((item) => {
-                const active =
-                  pathname === item.href ||
-                  (item.href.split("/").length > 3 &&
-                    pathname.startsWith(item.href));
+                const active = isActive(pathname, item);
+                const isMesa = item.href === `${base}/mesa`;
                 return (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className={`flex items-center gap-2 rounded-md px-2 py-2 text-sm transition-colors
+                      className={`group relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm transition-colors
                         ${
                           active
-                            ? "bg-surface-raised text-text"
+                            ? "bg-accent/12 font-medium text-accent"
                             : "text-text-secondary hover:bg-surface-raised hover:text-text"
-                        }
-                        ${item.highlight ? "font-medium text-accent" : ""}`}
+                        }`}
                     >
-                      <Icon name={item.icon} size={18} />
+                      {active && (
+                        <span className="absolute inset-y-1.5 left-0 w-0.5 rounded-full bg-accent" />
+                      )}
+                      <Icon
+                        name={item.icon}
+                        size={18}
+                        className={
+                          isMesa && !active ? "text-accent/80" : undefined
+                        }
+                      />
                       {item.label}
+                      {isMesa && (
+                        <span className="ml-auto rounded bg-accent/20 px-1.5 py-0.5 text-[9px] uppercase tracking-wide text-accent">
+                          jogar
+                        </span>
+                      )}
                     </Link>
                   </li>
                 );
