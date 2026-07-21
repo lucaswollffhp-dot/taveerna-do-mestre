@@ -478,6 +478,7 @@ export interface Database {
           x: number;
           y: number;
           size: number;
+          rotation: number;
           ref_type: TokenRefType;
           ref_id: string | null;
           controlled_by: string | null;
@@ -493,6 +494,7 @@ export interface Database {
           x?: number;
           y?: number;
           size?: number;
+          rotation?: number;
           ref_type?: TokenRefType;
           ref_id?: string | null;
           controlled_by?: string | null;

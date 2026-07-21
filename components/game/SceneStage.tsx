@@ -61,6 +61,10 @@ export function SceneStage({
   const panRef = useRef<{ startX: number; startY: number; ox: number; oy: number } | null>(null);
   const lastWrite = useRef(0);
 
+  // Cena acessível dentro dos handlers sem re-vincular listeners.
+  const sceneRef = useRef(scene);
+  sceneRef.current = scene;
+
   // ── Arraste de token (coordenadas relativas ao "mundo" transformado) ──
   const posFromEvent = useCallback((clientX: number, clientY: number) => {
     const rect = worldRef.current?.getBoundingClientRect();
@@ -68,6 +72,23 @@ export function SceneStage({
     return {
       x: Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100)),
       y: Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100)),
+    };
+  }, []);
+
+  // Snap ao grid (quando ativo), convertendo o passo em px para %.
+  const snapPos = useCallback((x: number, y: number) => {
+    const sc = sceneRef.current;
+    const vp = viewportRef.current;
+    if (!sc?.grid_enabled || !sc.grid_size || !vp?.clientWidth || !vp.clientHeight) {
+      return { x, y };
+    }
+    const cellX = (sc.grid_size / vp.clientWidth) * 100;
+    const cellY = (sc.grid_size / vp.clientHeight) * 100;
+    const sx = (Math.floor(x / cellX) + 0.5) * cellX;
+    const sy = (Math.floor(y / cellY) + 0.5) * cellY;
+    return {
+      x: Math.max(0, Math.min(100, sx)),
+      y: Math.max(0, Math.min(100, sy)),
     };
   }, []);
 
@@ -86,7 +107,11 @@ export function SceneStage({
     }
     function onUp(e: PointerEvent) {
       const p = posFromEvent(e.clientX, e.clientY);
-      if (p) onPersist(id, p.x, p.y);
+      if (p) {
+        const s = snapPos(p.x, p.y);
+        setDrag((d) => (d ? { ...d, x: s.x, y: s.y } : d));
+        onPersist(id, s.x, s.y);
+      }
       setDrag(null);
     }
     window.addEventListener("pointermove", onMove);
@@ -95,7 +120,7 @@ export function SceneStage({
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
     };
-  }, [drag, posFromEvent, onPersist]);
+  }, [drag, posFromEvent, onPersist, snapPos]);
 
   // ── Pan (arrastar o fundo) ──
   useEffect(() => {
@@ -261,13 +286,15 @@ export function SceneStage({
               style={{ left: `${pos.x}%`, top: `${pos.y}%`, touchAction: "none" }}
               title={t.name}
             >
-              <TokenAvatar
-                name={t.name}
-                imageUrl={t.image_url}
-                color={t.color}
-                size={t.size}
-                highlight={isActive}
-              />
+              <div style={{ transform: `rotate(${t.rotation}deg)` }}>
+                <TokenAvatar
+                  name={t.name}
+                  imageUrl={t.image_url}
+                  color={t.color}
+                  size={t.size}
+                  highlight={isActive}
+                />
+              </div>
               {t.name && (
                 <span className="pointer-events-none absolute left-1/2 top-full mt-0.5 -translate-x-1/2 whitespace-nowrap rounded bg-black/70 px-1.5 py-0.5 text-[10px] text-white">
                   {t.name}
