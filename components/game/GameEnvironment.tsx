@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Icon, type IconName } from "@/components/ui/Icon";
@@ -199,21 +200,41 @@ export function GameEnvironment({
 
   const dock = isMaster ? masterDock : playerDock;
   const active = dock.find((d) => d.key === open) ?? null;
+  const exitHref = isMaster
+    ? `/campaign/${campaignId}`
+    : `/play/${campaignId}`;
 
   return (
-    <div className="relative flex h-[calc(100dvh-3.5rem)] w-full overflow-hidden bg-bg">
-      {/* Palco */}
-      <div className="relative min-w-0 flex-1">
-        <SceneStage
-          scene={scene}
-          tokens={tokens}
-          canMove={canMove}
-          onPersist={persist}
-        />
+    <div className="fixed inset-0 z-40 flex flex-col overflow-hidden bg-bg">
+      {/* Barra superior mínima */}
+      <div className="flex h-11 shrink-0 items-center justify-between border-b border-border bg-surface px-3">
+        <Link
+          href={exitHref}
+          className="inline-flex items-center gap-1.5 text-sm text-text-secondary transition-colors hover:text-accent"
+        >
+          <Icon name="back" size={16} />
+          Sair da mesa
+        </Link>
+        <span className="truncate font-title text-sm text-text">
+          {scene?.name ?? "Sem cena ativa"}
+        </span>
+        <span className="w-20" />
       </div>
 
-      {/* Drawer */}
-      {active && (
+      {/* Corpo: palco + drawer + dock */}
+      <div className="flex min-h-0 flex-1">
+        {/* Palco */}
+        <div className="relative min-w-0 flex-1">
+          <SceneStage
+            scene={scene}
+            tokens={tokens}
+            canMove={canMove}
+            onPersist={persist}
+          />
+        </div>
+
+        {/* Drawer */}
+        {active && (
         <aside className="flex w-80 max-w-[85vw] flex-col border-l border-border bg-surface">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div className="flex items-center gap-2">
@@ -251,7 +272,8 @@ export function GameEnvironment({
             </button>
           );
         })}
-      </nav>
+        </nav>
+      </div>
     </div>
   );
 }
