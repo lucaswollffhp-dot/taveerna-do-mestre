@@ -12,7 +12,7 @@ export default async function CampaignLayout({
   const supabase = await createClient();
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("id")
+    .select("id, name")
     .eq("id", params.id)
     .maybeSingle();
 
@@ -22,7 +22,10 @@ export default async function CampaignLayout({
 
   return (
     <div className="flex flex-1">
-      <Sidebar campaignId={params.id} />
+      <Sidebar
+        campaignId={params.id}
+        campaignName={(campaign as { name: string }).name}
+      />
       <div className="min-w-0 flex-1">{children}</div>
     </div>
   );
