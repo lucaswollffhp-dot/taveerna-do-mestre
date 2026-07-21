@@ -5,8 +5,14 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { campaignStatus, sessionStatus } from "@/lib/labels";
-import type { Campaign, Session } from "@/lib/types/database.types";
+import { TokenAvatar } from "@/components/ui/TokenAvatar";
+import { campaignStatus, sessionStatus, questStatus } from "@/lib/labels";
+import type {
+  Campaign,
+  Session,
+  Quest,
+  Character,
+} from "@/lib/types/database.types";
 
 interface StatDef {
   href: string;
@@ -61,7 +67,31 @@ export default async function CampaignPanelPage({
         .maybeSingle(),
     ]);
 
+  const [activeQuests, party] = await Promise.all([
+    supabase
+      .from("quests")
+      .select("id, title, type, status")
+      .eq("campaign_id", cid)
+      .in("status", ["active", "available"])
+      .order("created_at", { ascending: false })
+      .limit(5),
+    supabase
+      .from("characters")
+      .select("id, name, token_image_url, level, class")
+      .eq("campaign_id", cid)
+      .order("name")
+      .limit(10),
+  ]);
+
   const session = lastSession.data as Session | null;
+  const questRows = (activeQuests.data ?? []) as Pick<
+    Quest,
+    "id" | "title" | "type" | "status"
+  >[];
+  const partyMembers = (party.data ?? []) as Pick<
+    Character,
+    "id" | "name" | "token_image_url" | "level" | "class"
+  >[];
 
   const stats: StatDef[] = [
     { href: `${base}/characters`, label: "Personagens", icon: "character", value: characters.count ?? 0 },
@@ -138,67 +168,169 @@ export default async function CampaignPanelPage({
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* Continuar de onde parou */}
-        <Card className="space-y-3">
-          <h2 className="flex items-center gap-2 font-title text-lg text-text">
-            <Icon name="sessions" size={18} className="text-accent" />
-            Última sessão
-          </h2>
-          {session ? (
-            <div>
-              <div className="mb-1 flex items-center gap-2">
-                <span className="font-medium text-text">
-                  #{session.number} · {session.title}
-                </span>
-                <Badge tone={sessionStatus.tones[session.status]}>
-                  {sessionStatus.labels[session.status]}
-                </Badge>
-              </div>
-              {session.public_summary && (
-                <p className="line-clamp-3 text-sm text-text-secondary">
-                  {session.public_summary}
-                </p>
-              )}
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Coluna principal */}
+        <div className="space-y-6 lg:col-span-2">
+          {/* Missões ativas */}
+          <Card className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="flex items-center gap-2 font-title text-lg text-text">
+                <Icon name="quests" size={18} className="text-accent" />
+                Missões ativas
+              </h2>
               <Link
-                href={`${base}/sessions/${session.id}`}
-                className="mt-2 inline-block text-sm text-accent hover:underline"
+                href={`${base}/quests`}
+                className="text-xs text-text-muted hover:text-accent"
               >
-                Ver sessão →
+                Ver todas →
               </Link>
             </div>
-          ) : (
-            <p className="text-sm text-text-muted">
-              Nenhuma sessão registrada ainda.{" "}
-              <Link
-                href={`${base}/sessions/new`}
-                className="text-accent hover:underline"
-              >
-                Planejar a primeira →
-              </Link>
-            </p>
-          )}
-        </Card>
+            {questRows.length === 0 ? (
+              <p className="text-sm text-text-muted">
+                Nenhuma missão em andamento.{" "}
+                <Link
+                  href={`${base}/quests/new`}
+                  className="text-accent hover:underline"
+                >
+                  Criar missão →
+                </Link>
+              </p>
+            ) : (
+              <ul className="divide-y divide-border">
+                {questRows.map((q) => (
+                  <li key={q.id}>
+                    <Link
+                      href={`${base}/quests/${q.id}`}
+                      className="flex items-center justify-between gap-2 py-2.5 text-sm transition-colors hover:text-accent"
+                    >
+                      <span className="flex items-center gap-2 text-text-secondary">
+                        <Icon name="quests" size={15} className="text-text-muted" />
+                        {q.title}
+                      </span>
+                      <Badge tone={questStatus.tones[q.status]}>
+                        {questStatus.labels[q.status]}
+                      </Badge>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
 
-        {/* Ações rápidas */}
-        <Card className="space-y-3">
-          <h2 className="flex items-center gap-2 font-title text-lg text-text">
-            <Icon name="add" size={18} className="text-accent" />
-            Adicionar rápido
-          </h2>
-          <div className="grid grid-cols-2 gap-2">
-            {quickAdds.map((a) => (
+          {/* Última sessão */}
+          <Card className="space-y-3">
+            <h2 className="flex items-center gap-2 font-title text-lg text-text">
+              <Icon name="sessions" size={18} className="text-accent" />
+              Última sessão
+            </h2>
+            {session ? (
+              <div>
+                <div className="mb-1 flex flex-wrap items-center gap-2">
+                  <span className="font-medium text-text">
+                    #{session.number} · {session.title}
+                  </span>
+                  <Badge tone={sessionStatus.tones[session.status]}>
+                    {sessionStatus.labels[session.status]}
+                  </Badge>
+                </div>
+                {session.public_summary && (
+                  <p className="line-clamp-3 text-sm text-text-secondary">
+                    {session.public_summary}
+                  </p>
+                )}
+                <Link
+                  href={`${base}/sessions/${session.id}`}
+                  className="mt-2 inline-block text-sm text-accent hover:underline"
+                >
+                  Ver sessão →
+                </Link>
+              </div>
+            ) : (
+              <p className="text-sm text-text-muted">
+                Nenhuma sessão registrada ainda.{" "}
+                <Link
+                  href={`${base}/sessions/new`}
+                  className="text-accent hover:underline"
+                >
+                  Planejar a primeira →
+                </Link>
+              </p>
+            )}
+          </Card>
+        </div>
+
+        {/* Coluna lateral */}
+        <div className="space-y-6">
+          {/* Elenco */}
+          <Card className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="flex items-center gap-2 font-title text-lg text-text">
+                <Icon name="character" size={18} className="text-accent" />
+                Elenco
+              </h2>
               <Link
-                key={a.href}
-                href={a.href}
-                className="flex items-center gap-2 rounded-lg border border-border bg-surface-raised px-3 py-2.5 text-sm text-text-secondary transition-colors hover:border-accent/40 hover:text-text"
+                href={`${base}/characters`}
+                className="text-xs text-text-muted hover:text-accent"
               >
-                <Icon name={a.icon} size={16} className="text-accent" />
-                {a.label}
+                Ver →
               </Link>
-            ))}
-          </div>
-        </Card>
+            </div>
+            {partyMembers.length === 0 ? (
+              <p className="text-sm text-text-muted">
+                Nenhum personagem.{" "}
+                <Link
+                  href={`${base}/characters/new`}
+                  className="text-accent hover:underline"
+                >
+                  Criar →
+                </Link>
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {partyMembers.map((c) => (
+                  <li key={c.id}>
+                    <Link
+                      href={`${base}/characters/${c.id}`}
+                      className="flex items-center gap-2.5 rounded-lg px-1 py-1 transition-colors hover:bg-surface-raised"
+                    >
+                      <TokenAvatar
+                        name={c.name}
+                        imageUrl={c.token_image_url}
+                        size={32}
+                      />
+                      <div className="min-w-0">
+                        <p className="truncate text-sm text-text">{c.name}</p>
+                        <p className="truncate text-xs text-text-muted">
+                          {c.class ?? "Aventureiro"} · Nv {c.level}
+                        </p>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+
+          {/* Ações rápidas */}
+          <Card className="space-y-3">
+            <h2 className="flex items-center gap-2 font-title text-lg text-text">
+              <Icon name="add" size={18} className="text-accent" />
+              Adicionar rápido
+            </h2>
+            <div className="grid grid-cols-2 gap-2">
+              {quickAdds.map((a) => (
+                <Link
+                  key={a.href}
+                  href={a.href}
+                  className="flex items-center gap-2 rounded-lg border border-border bg-surface-raised px-3 py-2.5 text-sm text-text-secondary transition-colors hover:border-accent/40 hover:text-text"
+                >
+                  <Icon name={a.icon} size={16} className="text-accent" />
+                  {a.label}
+                </Link>
+              ))}
+            </div>
+          </Card>
+        </div>
       </div>
     </main>
   );

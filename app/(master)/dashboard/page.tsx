@@ -80,28 +80,48 @@ export default async function DashboardPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {campaigns.map((campaign) => (
             <Link key={campaign.id} href={`/campaign/${campaign.id}`}>
-              <Card className="h-full transition-colors hover:border-accent/50">
-                <div className="mb-3 flex items-start justify-between gap-2">
-                  <h3 className="font-title text-lg text-text">
-                    {campaign.name}
-                  </h3>
-                  <Badge tone={statusTone[campaign.status]}>
-                    {statusLabels[campaign.status]}
-                  </Badge>
+              <Card className="group relative h-full overflow-hidden transition-colors hover:border-accent/50">
+                <div
+                  className="pointer-events-none absolute inset-x-0 top-0 h-20 opacity-60"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(400px 120px at 20% -30%, rgba(184,134,11,.18), transparent 70%)",
+                  }}
+                />
+                <div className="relative">
+                  <div className="mb-3 flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-accent/25 bg-accent/10 text-accent">
+                        <Icon name="campaign" size={20} />
+                      </span>
+                      <h3 className="font-title text-lg leading-tight text-text">
+                        {campaign.name}
+                      </h3>
+                    </div>
+                    <Badge tone={statusTone[campaign.status]}>
+                      {statusLabels[campaign.status]}
+                    </Badge>
+                  </div>
+                  {campaign.setting && (
+                    <p className="text-sm text-text-secondary">
+                      {campaign.setting}
+                    </p>
+                  )}
+                  {campaign.tone && (
+                    <p className="mt-1 line-clamp-2 text-xs italic text-text-muted">
+                      {campaign.tone}
+                    </p>
+                  )}
+                  <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
+                    <span className="font-mono text-xs text-text-muted">
+                      {campaign.system}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-xs text-text-muted transition-colors group-hover:text-accent">
+                      Abrir
+                      <Icon name="table" size={13} />
+                    </span>
+                  </div>
                 </div>
-                {campaign.setting && (
-                  <p className="text-sm text-text-secondary">
-                    {campaign.setting}
-                  </p>
-                )}
-                {campaign.tone && (
-                  <p className="mt-1 text-xs italic text-text-muted">
-                    {campaign.tone}
-                  </p>
-                )}
-                <p className="mt-4 font-mono text-xs text-text-muted">
-                  {campaign.system}
-                </p>
               </Card>
             </Link>
           ))}
