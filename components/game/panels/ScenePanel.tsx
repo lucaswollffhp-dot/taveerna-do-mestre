@@ -20,6 +20,7 @@ interface ScenePanelProps {
   onAddToken: (entry: PaletteEntry, refType: "character" | "npc") => void;
   onAddCustom: () => void;
   onRemoveToken: (id: string) => void;
+  onUpdateToken: (id: string, patch: { size?: number; rotation?: number }) => void;
   fogMode: boolean;
   onToggleFogMode: () => void;
   onToggleFog: () => void;
@@ -36,6 +37,7 @@ export function ScenePanel({
   onAddToken,
   onAddCustom,
   onRemoveToken,
+  onUpdateToken,
   fogMode,
   onToggleFogMode,
   onToggleFog,
@@ -51,6 +53,7 @@ export function ScenePanel({
   const [name, setName] = useState("");
   const [mapUrl, setMapUrl] = useState("");
   const [creating, setCreating] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function activate(id: string) {
     await supabase
@@ -267,30 +270,109 @@ export function ScenePanel({
 
             {tokens.length > 0 && (
               <ul className="mt-2 space-y-1.5">
-                {tokens.map((t) => (
-                  <li
-                    key={t.id}
-                    className="flex items-center justify-between gap-2"
-                  >
-                    <span className="flex items-center gap-2 text-sm text-text-secondary">
-                      <TokenAvatar
-                        name={t.name}
-                        imageUrl={t.image_url}
-                        color={t.color}
-                        size={20}
-                      />
-                      {t.name || "Sem nome"}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onRemoveToken(t.id)}
-                      aria-label="Remover token"
+                {tokens.map((t) => {
+                  const selected = selectedId === t.id;
+                  return (
+                    <li
+                      key={t.id}
+                      className={`rounded-md border ${
+                        selected
+                          ? "border-accent/50 bg-bg"
+                          : "border-transparent"
+                      }`}
                     >
-                      <Icon name="remove" size={13} />
-                    </Button>
-                  </li>
-                ))}
+                      <div className="flex items-center justify-between gap-2 p-1.5">
+                        <button
+                          onClick={() =>
+                            setSelectedId(selected ? null : t.id)
+                          }
+                          className="flex min-w-0 items-center gap-2 text-sm text-text-secondary hover:text-text"
+                        >
+                          <TokenAvatar
+                            name={t.name}
+                            imageUrl={t.image_url}
+                            color={t.color}
+                            size={20}
+                          />
+                          <span className="truncate">
+                            {t.name || "Sem nome"}
+                          </span>
+                        </button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onRemoveToken(t.id)}
+                          aria-label="Remover token"
+                        >
+                          <Icon name="remove" size={13} />
+                        </Button>
+                      </div>
+
+                      {selected && (
+                        <div className="space-y-2 border-t border-border px-2 py-2">
+                          <div className="flex items-center justify-between gap-2 text-xs text-text-secondary">
+                            <span>Tamanho</span>
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() =>
+                                  onUpdateToken(t.id, {
+                                    size: Math.max(24, t.size - 10),
+                                  })
+                                }
+                                className="flex h-6 w-6 items-center justify-center rounded border border-border hover:text-text"
+                              >
+                                −
+                              </button>
+                              <span className="w-10 text-center">
+                                {t.size}px
+                              </span>
+                              <button
+                                onClick={() =>
+                                  onUpdateToken(t.id, {
+                                    size: Math.min(200, t.size + 10),
+                                  })
+                                }
+                                className="flex h-6 w-6 items-center justify-center rounded border border-border hover:text-text"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between gap-2 text-xs text-text-secondary">
+                            <span>Rotação</span>
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() =>
+                                  onUpdateToken(t.id, {
+                                    rotation: (t.rotation - 45 + 360) % 360,
+                                  })
+                                }
+                                className="flex h-6 w-6 items-center justify-center rounded border border-border hover:text-text"
+                                aria-label="Girar à esquerda"
+                              >
+                                ↺
+                              </button>
+                              <span className="w-10 text-center">
+                                {t.rotation}°
+                              </span>
+                              <button
+                                onClick={() =>
+                                  onUpdateToken(t.id, {
+                                    rotation: (t.rotation + 45) % 360,
+                                  })
+                                }
+                                className="flex h-6 w-6 items-center justify-center rounded border border-border hover:text-text"
+                                aria-label="Girar à direita"
+                              >
+                                ↻
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </>

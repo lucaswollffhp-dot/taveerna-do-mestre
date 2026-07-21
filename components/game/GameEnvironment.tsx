@@ -114,6 +114,14 @@ export function GameEnvironment({
     [supabase, refresh],
   );
 
+  const updateToken = useCallback(
+    async (id: string, patch: { size?: number; rotation?: number }) => {
+      await supabase.from("tokens").update(patch).eq("id", id);
+      await refresh();
+    },
+    [supabase, refresh],
+  );
+
   const revealRect = useCallback(
     async (rect: { x: number; y: number; w: number; h: number }) => {
       if (!scene) return;
@@ -156,6 +164,7 @@ export function GameEnvironment({
           onAddToken={addToken}
           onAddCustom={addCustom}
           onRemoveToken={removeToken}
+          onUpdateToken={updateToken}
           fogMode={fogMode}
           onToggleFogMode={() => setFogMode((v) => !v)}
           onToggleFog={() => setFog({ fog_enabled: !scene?.fog_enabled })}
