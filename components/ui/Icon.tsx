@@ -13,7 +13,6 @@ import {
   Gift,
   Inbox,
   LayoutDashboard,
-  LayoutGrid,
   Lock,
   LogIn,
   LogOut,
@@ -76,7 +75,7 @@ const icons: Record<IconName, LucideIcon> = {
   sessions: BookOpen,
   live: Activity,
   npcs: Users,
-  locations: Map,
+  locations: MapPin,
   factions: Flag,
   quests: ScrollText,
   loot: Coins,
@@ -101,7 +100,7 @@ const icons: Record<IconName, LucideIcon> = {
   xp: Zap,
   reward: Gift,
   pin: MapPin,
-  table: LayoutGrid,
+  table: Map,
 };
 
 interface IconProps {

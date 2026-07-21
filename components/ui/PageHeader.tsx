@@ -32,17 +32,25 @@ export function PageHeader({
           {backLabel}
         </Link>
       )}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="flex items-center gap-2.5 font-title text-2xl font-bold text-text">
-            {icon && <Icon name={icon} size={24} className="text-accent" />}
-            {title}
-          </h1>
-          {description && (
-            <p className="mt-1 text-sm text-text-secondary">{description}</p>
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
+        <div className="flex items-center gap-3">
+          {icon && (
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-accent/25 bg-gradient-to-b from-accent/15 to-accent/5 text-accent">
+              <Icon name={icon} size={22} />
+            </span>
           )}
+          <div>
+            <h1 className="font-title text-2xl font-bold text-text">{title}</h1>
+            {description && (
+              <p className="mt-0.5 text-sm text-text-secondary">
+                {description}
+              </p>
+            )}
+          </div>
         </div>
-        {actions && <div className="flex items-center gap-2">{actions}</div>}
+        {actions && (
+          <div className="flex items-center gap-2">{actions}</div>
+        )}
       </div>
     </div>
   );
