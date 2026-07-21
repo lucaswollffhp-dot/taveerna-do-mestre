@@ -55,6 +55,14 @@ export function ScenePanel({
     await supabase.from("scenes").delete().eq("id", id);
   }
 
+  async function toggleGrid() {
+    if (!activeScene) return;
+    await supabase
+      .from("scenes")
+      .update({ grid_enabled: !activeScene.grid_enabled })
+      .eq("id", activeScene.id);
+  }
+
   async function createScene() {
     setCreating(true);
     const isFirst = scenes.length === 0;
@@ -130,7 +138,21 @@ export function ScenePanel({
 
       {/* Tokens da cena ativa */}
       <div className="space-y-2">
-        <h3 className="font-title text-text">Tokens na cena ativa</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="font-title text-text">Tokens na cena ativa</h3>
+          {activeScene && (
+            <button
+              onClick={toggleGrid}
+              className={`rounded-full border px-2.5 py-1 text-xs transition-colors ${
+                activeScene.grid_enabled
+                  ? "border-accent/50 bg-accent/20 text-accent"
+                  : "border-border text-text-muted hover:text-text"
+              }`}
+            >
+              Grid {activeScene.grid_enabled ? "ligado" : "desligado"}
+            </button>
+          )}
+        </div>
         {!activeScene ? (
           <p className="text-sm text-text-muted">
             Ative uma cena para posicionar tokens.
